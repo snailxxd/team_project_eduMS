@@ -1,23 +1,11 @@
-package utils;
+package service;
 
 import entities.User;
-import entities.UserRole;
 import entities.PersonalInfo;
-import entities.GradeType;
-import entities.GradeChange;
-import entities.Grade;
-import entities.Student;
 import entities.Section;
-import entities.Admin;
-import entities.Teacher;
-import entities.Course;
-import entities.Take;
-import entities.TimeSlot;
 import queries.ApiResult;
 
-import java.sql.PreparedStatement;
-
-public interface EduMS {
+public interface EducationMS {
     // 通用模块接口
     ApiResult getPersonalInfo(int userId);               // 查询个人信息
     ApiResult updatePersonalInfo(int userId, PersonalInfo info);  // 更新个人信息和头像

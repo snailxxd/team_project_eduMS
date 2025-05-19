@@ -1,10 +1,22 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "personal_info")
 public class PersonalInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "personal_info_id")
     private int personalInfoId;
+
     private String name;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
 
+    // constructors
     public PersonalInfo() {}
 
     public PersonalInfo(int personalInfoId, String name, String phoneNumber) {
@@ -13,6 +25,7 @@ public class PersonalInfo {
         this.phoneNumber = phoneNumber;
     }
 
+    // 转换为字符串
     public String toString() {
         return "PersonalInfo{" +
                 "personalInfoId=" + personalInfoId +
@@ -21,6 +34,7 @@ public class PersonalInfo {
                 '}';
     }
 
+    // getter and setter methods
     public int getPersonalInfoId() {
         return personalInfoId;
     }

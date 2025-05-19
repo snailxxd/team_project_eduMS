@@ -1,20 +1,32 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "grade")
 public class Grade {
-    private GradeType gradeType;
+
+    @Column(name = "grade_type")
+    private String gradeType;
+
+    @Column(name = "take_id")
     private int takeId;
+
     private int grade;
+
     private float proportion;
 
+    // constructors
     public Grade() {};
 
-    public Grade(GradeType gradeType, int takeId, int grade, float proportion) {
+    public Grade(String gradeType, int takeId, int grade, float proportion) {
         this.gradeType = gradeType;
         this.takeId = takeId;
         this.grade = grade;
         this.proportion = proportion;
     }
 
+    // 转换为字符串
     public String toString() {
         return "Grade{" +
                 "gradeType=" + gradeType +
@@ -24,11 +36,12 @@ public class Grade {
                 '}';
     }
 
-    public GradeType getGradeType() {
+    // getter and setter methods
+    public String getGradeType() {
         return gradeType;
     }
 
-    public void setGradeType(GradeType gradeType) {
+    public void setGradeType(String gradeType) {
         this.gradeType = gradeType;
     }
 

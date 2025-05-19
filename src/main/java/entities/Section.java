@@ -1,15 +1,34 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "section")
 public class Section {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "section_id")
     private int sectionId;
+
+    @Column(name = "course_id")
     private int courseId;
+
     private String semester;
     private int year;
+
+    @Column(name = "classroom_id")
     private int classroomId;
+
+    @Column(name = "time_slot_id")
     private int timeSlotId;
+
+    @Column(name = "teacher_id")
     private int teacherId;
+
     private int time;
 
+    // constructors
     public Section() {};
 
     public Section(int sectionId, int courseId, String semester, int year, int classroomId, int timeSlotId, int teacherId) {
@@ -22,6 +41,7 @@ public class Section {
         this.teacherId = teacherId;
     }
 
+    // 转换为字符串
     public String toString() {
         return "Section{" +
                 "sectionId=" + sectionId +
@@ -34,6 +54,7 @@ public class Section {
                 '}';
     }
 
+    // getter and setter methods
     public int getSectionId() {
         return sectionId;
     }

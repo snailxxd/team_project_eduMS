@@ -1,9 +1,18 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "teacher")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Teacher extends User {
+
+    @Column(name = "dept_name")
     private String deptName;
+
     private int salary;
 
+    // constructors
     public Teacher() {};
 
     public Teacher(int userId, String accountNumber, String password, int personalInfoId, String deptName, int salary) {
@@ -17,6 +26,7 @@ public class Teacher extends User {
         return UserRole.TEACHER;
     }
 
+    // 转换为字符串
     @Override
     public String toString() {
         return "Teacher{" +
@@ -29,6 +39,7 @@ public class Teacher extends User {
                 '}';
     }
 
+    // getter and setter methods
     public String getDeptName() {
         return deptName;
     }

@@ -1,11 +1,26 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "user")
 public abstract class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     protected int userId;
+
+    @Column(name = "account_number")
     protected String accountNumber;
+
     protected String password;
+
+    @Column(name = "personal_info_id")
     protected int personalInfoId;
 
+    // constructors
     public User() {}
 
     public User(int userId, String accountNumber, String password, int personalInfoId) {
@@ -15,6 +30,7 @@ public abstract class User {
         this.personalInfoId = personalInfoId;
     }
 
+    // getter and setter methods
     public abstract UserRole getUserType();
 
     public abstract String toString();

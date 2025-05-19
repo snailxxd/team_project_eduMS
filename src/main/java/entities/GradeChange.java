@@ -1,15 +1,30 @@
 package entities;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "grade_change")
 public class GradeChange {
+
+    @Column(name = "take_id")
     private int takeId;
+
+    @Column(name = "teacher_id")
     private int teacherId;
+
     private boolean result;
+
+    @Column(name = "new_grade")
     private int newGrade;
+
+    @Column(name = "apply_time")
     private LocalDateTime applyTime;
+
+    @Column(name = "check_time")
     private LocalDateTime checkTime;
 
+    // constructors
     public GradeChange() {};
 
     public GradeChange(int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime) {
@@ -21,6 +36,7 @@ public class GradeChange {
         this.checkTime = checkTime;
     }
 
+    // 转换为字符串
     public String toString() {
         return "GradeChange{" +
                 "takeId=" + takeId +
@@ -32,6 +48,7 @@ public class GradeChange {
                 '}';
     }
 
+    // getter and setter methods
     public int getTakeId() {
         return takeId;
     }

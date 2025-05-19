@@ -1,13 +1,26 @@
 package entities;
 
+import jakarta.persistence.*;
 import java.time.LocalTime;
 
+@Entity
+@Table(name = "time_slot")
 public class TimeSlot {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "time_slot_id")
     private int timeSlotId;
+
     private int day;
+
+    @Column(name = "start_time")
     private LocalTime startTime;
+
+    @Column(name = "end_time")
     private LocalTime endTime;
 
+    // constructors
     public TimeSlot() {}
 
     public TimeSlot(int timeSlotId, int day, LocalTime startTime, LocalTime endTime) {
@@ -17,6 +30,7 @@ public class TimeSlot {
         this.endTime = endTime;
     }
 
+    // 转换为字符串
     public String toString() {
         return "TimeSlot{" +
                 "timeSlotId=" + timeSlotId +
@@ -26,6 +40,7 @@ public class TimeSlot {
                 '}';
     }
 
+    // getter and setter methods
     public int getTimeSlotId() {
         return timeSlotId;
     }

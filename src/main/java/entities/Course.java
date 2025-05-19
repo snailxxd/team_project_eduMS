@@ -1,13 +1,28 @@
 package entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "course")
 public class Course {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id")
     private int courseId;
+
     private String title;
+
+    @Column(name = "dept_name")
     private String deptName;
+
     private int credits;
+
     private String introduction;
+
     private int capacity;
 
+    // constructors
     public Course() {}
 
     public Course(int courseId, String title, String deptName, int credits, String introduction, int capacity) {
@@ -19,6 +34,7 @@ public class Course {
         this.capacity = capacity;
     }
 
+    // 转换为字符串
     public String toString() {
         return "Course{" +
                 "courseId=" + courseId +
@@ -30,6 +46,7 @@ public class Course {
                 '}';
     }
 
+    // getter and setter methods
     public int getCourseId() {
         return courseId;
     }

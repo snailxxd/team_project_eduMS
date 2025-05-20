@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "grade")
 public class Grade {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "grade_id")
+    private int gradeId;
 
     @Column(name = "grade_type")
     private String gradeType;
@@ -19,7 +23,8 @@ public class Grade {
     // constructors
     public Grade() {};
 
-    public Grade(String gradeType, int takeId, int grade, float proportion) {
+    public Grade(int gradeId, String gradeType, int takeId, int grade, float proportion) {
+        this.gradeId = gradeId;
         this.gradeType = gradeType;
         this.takeId = takeId;
         this.grade = grade;
@@ -29,7 +34,8 @@ public class Grade {
     // 转换为字符串
     public String toString() {
         return "Grade{" +
-                "gradeType=" + gradeType +
+                "gradeId=" + gradeId +
+                ", gradeType='" + gradeType + '\'' +
                 ", takeId=" + takeId +
                 ", grade=" + grade +
                 ", proportion=" + proportion +
@@ -37,6 +43,14 @@ public class Grade {
     }
 
     // getter and setter methods
+    public int getGradeId() {
+        return gradeId;
+    }
+
+    public void setGradeId(int gradeId) {
+        this.gradeId = gradeId;
+    }
+
     public String getGradeType() {
         return gradeType;
     }

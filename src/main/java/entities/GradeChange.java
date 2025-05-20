@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "grade_change")
 public class GradeChange {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "change_id")
+    private int changeId;
 
     @Column(name = "take_id")
     private int takeId;
@@ -27,7 +31,8 @@ public class GradeChange {
     // constructors
     public GradeChange() {};
 
-    public GradeChange(int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime) {
+    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime) {
+        this.changeId = changeId;
         this.takeId = takeId;
         this.teacherId = teacherId;
         this.result = result;
@@ -39,7 +44,8 @@ public class GradeChange {
     // 转换为字符串
     public String toString() {
         return "GradeChange{" +
-                "takeId=" + takeId +
+                "changeId=" + changeId +
+                ", takeId=" + takeId +
                 ", teacherId=" + teacherId +
                 ", result=" + result +
                 ", newGrade=" + newGrade +
@@ -49,6 +55,14 @@ public class GradeChange {
     }
 
     // getter and setter methods
+    public int getChangeId() {
+        return changeId;
+    }
+
+    public void setChangeId(int changeId) {
+        this.changeId = changeId;
+    }
+
     public int getTakeId() {
         return takeId;
     }

@@ -16,6 +16,8 @@ public class Grade {
     @Column(name = "take_id")
     private int takeId;
 
+    private String name;
+
     private int grade;
 
     private float proportion;
@@ -23,10 +25,11 @@ public class Grade {
     // constructors
     public Grade() {};
 
-    public Grade(int gradeId, String gradeType, int takeId, int grade, float proportion) {
+    public Grade(int gradeId, String gradeType, int takeId, String name, int grade, float proportion) {
         this.gradeId = gradeId;
         this.gradeType = gradeType;
         this.takeId = takeId;
+        this.name = name;
         this.grade = grade;
         this.proportion = proportion;
     }
@@ -35,6 +38,7 @@ public class Grade {
     public String toString() {
         return "Grade{" +
                 "gradeId=" + gradeId +
+                ", name=" + name +
                 ", gradeType='" + gradeType + '\'' +
                 ", takeId=" + takeId +
                 ", grade=" + grade +
@@ -49,6 +53,14 @@ public class Grade {
 
     public void setGradeId(int gradeId) {
         this.gradeId = gradeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getGradeType() {

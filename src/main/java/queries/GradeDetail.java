@@ -37,10 +37,11 @@ public class GradeDetail {
         private String type;
 
         //总分计算
-        public ScoreComponent(String name, double score, double proportion) {
+        public ScoreComponent(String name, double score, double proportion, String type) {
             this.name = name;
             this.score = score;
             this.proportion = proportion;
+            this.type = type;
         }
 
         public double getContribution() {

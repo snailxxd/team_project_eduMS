@@ -1,6 +1,5 @@
 package queries;
 
-import entities.User;
 
 public class UserQueryCondition {
 

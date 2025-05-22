@@ -1,6 +1,6 @@
 package queries;
 
-import entities.Course;
+
 
 public class CourseQueryCondition {
     private String name;

@@ -20,6 +20,20 @@ public class GradeDetail {
         }
     }
 
+    public GradeDetail(List<Grade> grades) {
+        if (!grades.isEmpty()) {
+            this.takesId = grades.get(0).getTakeId();
+            for (Grade grade : grades) {
+                components.add(new ScoreComponent(
+                    grade.getName(),
+                    grade.getGrade(),
+                    grade.getProportion(),
+                    grade.getGradeType()
+                ));
+            }
+        }
+    }
+
     // 核心方法：计算总成绩
     public double calculateTotalScore() {
         double total = 0.0;

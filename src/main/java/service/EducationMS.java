@@ -1,6 +1,11 @@
 package service;
 
 import entities.User;
+import entities.UserRole;
+
+import java.util.List;
+
+import entities.Grade;
 import entities.PersonalInfo;
 import entities.Section;
 import queries.ApiResult;
@@ -18,16 +23,16 @@ public interface EducationMS {
     // 管理员模块接口
     ApiResult addUser(User user);   // 添加用户
     ApiResult deleteUser(); // 删除用户
-    ApiResult searchUser();  // 查询用户
+    ApiResult searchUser(String keyword, UserRole role);  // 查询用户
     ApiResult updateUser();  // 更新用户
-    ApiResult auditGradeChange(); // 审核成绩变更
+    ApiResult auditGradeChange(int changeId, boolean isApproved); // 审核成绩变更
 
     // 教师模块接口
     ApiResult addSection(Section section);   // 添加开课信息
-    ApiResult deleteSection(); // 删除开课信息
-    ApiResult updateSection(); // 更新开课信息
-    ApiResult submitGrade();    // 提交成绩
-    ApiResult changeGrade();    // 修改成绩
-    ApiResult analyzeGradeTeacher();  // 成绩分析
+    ApiResult deleteSection(int sectionId); // 删除开课信息
+    ApiResult updateSection(Section section); // 更新开课信息
+    ApiResult submitGrade(List<Grade> grades);    // 提交成绩
+    ApiResult changeGrade(int takeId, int newGrade, String reason);    // 修改成绩
+    ApiResult analyzeGradeTeacher(int sectionId);  // 成绩分析
 
 }

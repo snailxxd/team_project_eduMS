@@ -26,16 +26,15 @@ public abstract class User {
     // constructors
     public User() {}
 
-    public User(int userId, String accountNumber, String password, int personalInfoId) {
+    public User(int userId, String accountNumber, String password, int personalInfoId, UserRole userType) {
         this.userId = userId;
         this.accountNumber = accountNumber;
         this.password = password;
         this.personalInfoId = personalInfoId;
+        this.userType = userType;
     }
 
     // getter and setter methods
-    public abstract UserRole getUserType();
-
     public abstract String toString();
 
     public int getUserId() { return userId; }
@@ -59,5 +58,13 @@ public abstract class User {
     public int getPersonalInfoId() { return personalInfoId; }
 
     public void setPersonalInfoId(int personalInfoId) { this.personalInfoId = personalInfoId; }
+
+    public UserRole getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserRole userType) {
+        this.userType = userType;
+    }
 
 }

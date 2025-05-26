@@ -15,15 +15,10 @@ public class Teacher extends User {
     // constructors
     public Teacher() {};
 
-    public Teacher(int userId, String accountNumber, String password, int personalInfoId, String deptName, int salary) {
-        super(userId, accountNumber, password, personalInfoId);
+    public Teacher(int userId, String accountNumber, String password, int personalInfoId, String deptName, int salary, UserRole userRole) {
+        super(userId, accountNumber, password, personalInfoId, userRole);
         this.deptName = deptName;
         this.salary = salary;
-    }
-
-    @Override
-    public UserRole getUserType() {
-        return UserRole.teacher;
     }
 
     // 转换为字符串
@@ -55,4 +50,5 @@ public class Teacher extends User {
     public void setSalary(int salary) {
         this.salary = salary;
     }
+
 }

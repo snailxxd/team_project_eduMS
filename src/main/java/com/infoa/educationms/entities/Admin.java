@@ -7,11 +7,6 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Admin extends User {
 
-    @Override
-    public UserRole getUserType() {
-        return UserRole.administrator;
-    }
-
     // 转换为字符串
     @Override
     public String toString() {

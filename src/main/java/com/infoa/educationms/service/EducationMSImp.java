@@ -6,6 +6,8 @@ import com.infoa.educationms.queries.GradeDetail;
 import com.infoa.educationms.queries.UserList;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -323,7 +325,9 @@ public class EducationMSImp implements EducationMS {
     }
 
     private User getCurrentUser() {
-        return userRepository.findById(1).orElse(null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String account = authentication.getName(); // 当前登录用户名
+        return userRepository.findByAccountNumber(account); // 查数据库，返回完整用户对象
     }
 
     private int getCurrentUserId() {

@@ -16,15 +16,10 @@ public class Student extends User {
     // constructors
     public Student() {}
 
-    public Student(int userId, String accountNumber, String password, int personalInfoId, String deptName, int totalCredit) {
-        super(userId, accountNumber, password, personalInfoId);
+    public Student(int userId, String accountNumber, String password, int personalInfoId, String deptName, int totalCredit, UserRole userRole) {
+        super(userId, accountNumber, password, personalInfoId, userRole);
         this.deptName = deptName;
         this.totalCredit = totalCredit;
-    }
-
-    @Override
-    public UserRole getUserType() {
-        return UserRole.student;
     }
 
     // 转换为字符串

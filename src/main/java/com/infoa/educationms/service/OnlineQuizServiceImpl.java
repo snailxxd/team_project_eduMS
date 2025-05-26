@@ -2,6 +2,7 @@ package com.infoa.educationms.service;
 
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -12,11 +13,19 @@ import java.util.stream.Collectors;
 @Service
 public class OnlineQuizServiceImpl implements OnlineQuizService {
 
-
+    @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
     private GradeRepository gradeRepository;
+
+    @Autowired
     private SectionRepository sectionRepository;
+
+    @Autowired
     private TakeRepository takeRepository;
 
 

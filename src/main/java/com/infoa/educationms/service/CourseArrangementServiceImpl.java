@@ -6,6 +6,7 @@ import com.infoa.educationms.entities.Teacher;
 import com.infoa.educationms.repository.ClassroomRepository;
 import com.infoa.educationms.repository.CourseRepository;
 import com.infoa.educationms.repository.TeacherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,13 @@ import java.util.List;
 @Service
 public class CourseArrangementServiceImpl implements CourseArrangementService {
 
+    @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
     private ClassroomRepository classroomRepository;
+
+    @Autowired
     private TeacherRepository teacherRepository;
 
     @Override

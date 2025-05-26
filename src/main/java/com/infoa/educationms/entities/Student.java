@@ -24,7 +24,7 @@ public class Student extends User {
 
     @Override
     public UserRole getUserType() {
-        return UserRole.STUDENT;
+        return UserRole.student;
     }
 
     // 转换为字符串

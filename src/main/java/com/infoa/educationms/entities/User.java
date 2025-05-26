@@ -20,6 +20,9 @@ public abstract class User {
     @Column(name = "personal_info_id")
     protected int personalInfoId;
 
+    @Column(name = "type")
+    protected UserRole userType;
+
     // constructors
     public User() {}
 

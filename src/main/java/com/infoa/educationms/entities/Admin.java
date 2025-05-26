@@ -9,7 +9,7 @@ public class Admin extends User {
 
     @Override
     public UserRole getUserType() {
-        return UserRole.ADMIN;
+        return UserRole.administrator;
     }
 
     // 转换为字符串

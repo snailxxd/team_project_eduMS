@@ -52,7 +52,7 @@ public class EducationMSImp implements EducationMS {
     public ApiResult updatePersonalInfo(int userId, PersonalInfo info) {
         User currentUser = getCurrentUser();
         // 管理员或用户本人可修改
-        if (!currentUser.getUserType().equals(UserRole.ADMIN)) {
+        if (!currentUser.getUserType().equals(UserRole.administrator)) {
             if (currentUser.getUserId() != userId) {
                 return new ApiResult(false, "无权修改他人信息");
             }
@@ -310,12 +310,12 @@ public class EducationMSImp implements EducationMS {
     //-------------------------------- 辅助方法 --------------------------------//
     private boolean isAdmin() {
         User currentUser = getCurrentUser();
-        return currentUser != null && currentUser.getUserType() == UserRole.ADMIN;
+        return currentUser != null && currentUser.getUserType() == UserRole.administrator;
     }
 
     private boolean isTeacher() {
         User currentUser = getCurrentUser();
-        return currentUser != null && currentUser.getUserType() == UserRole.TEACHER;
+        return currentUser != null && currentUser.getUserType() == UserRole.teacher;
     }
 
     private boolean isCurrentUser(int userId) {

@@ -5,6 +5,7 @@ import com.infoa.educationms.entities.Grade;
 import com.infoa.educationms.entities.Section;
 import com.infoa.educationms.entities.Take;
 import com.infoa.educationms.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +14,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseResourceServiceImpl implements CourseResourceService {
+
+    @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
     private GradeRepository gradeRepository;
+
+    @Autowired
     private SectionRepository sectionRepository;
+
+    @Autowired
     private TakeRepository takeRepository;
 
     @Override

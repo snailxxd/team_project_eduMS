@@ -23,7 +23,7 @@ public class Teacher extends User {
 
     @Override
     public UserRole getUserType() {
-        return UserRole.TEACHER;
+        return UserRole.teacher;
     }
 
     // 转换为字符串

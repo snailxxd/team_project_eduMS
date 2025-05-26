@@ -17,7 +17,7 @@ public abstract class User {
 
     protected String password;
 
-    @Column(name = "personal_info_id")
+    @Column(name = "personal_infor_id")
     protected int personalInfoId;
 
     @Column(name = "type")

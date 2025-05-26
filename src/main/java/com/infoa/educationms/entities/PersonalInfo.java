@@ -3,12 +3,12 @@ package com.infoa.educationms.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "personal_info")
+@Table(name = "personal_infomation")
 public class PersonalInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personal_info_id")
+    @Column(name = "personal_infor_id")
     private int personalInfoId;
 
     private String name;
@@ -16,13 +16,16 @@ public class PersonalInfo {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    private String picture;
+
     // constructors
     public PersonalInfo() {}
 
-    public PersonalInfo(int personalInfoId, String name, String phoneNumber) {
+    public PersonalInfo(int personalInfoId, String name, String phoneNumber, String picture) {
         this.personalInfoId = personalInfoId;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.picture = picture;
     }
 
     // 转换为字符串
@@ -31,8 +34,9 @@ public class PersonalInfo {
                 "personalInfoId=" + personalInfoId +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", picture='" + picture + '\'' +
                 '}';
-    }
+   }
 
     // getter and setter methods
     public int getPersonalInfoId() {
@@ -57,5 +61,13 @@ public class PersonalInfo {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

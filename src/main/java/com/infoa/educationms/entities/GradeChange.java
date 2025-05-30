@@ -32,7 +32,7 @@ public class GradeChange {
     private int gradeId;
 
     // constructors
-    public GradeChange() {};
+    public GradeChange() {}
 
     public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId) {
         this.changeId = changeId;

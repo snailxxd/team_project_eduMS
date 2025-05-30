@@ -23,7 +23,7 @@ public class Grade {
     private float proportion;
 
     // constructors
-    public Grade() {};
+    public Grade() {}
 
     public Grade(int gradeId, String gradeType, int takeId, String name, int grade, float proportion) {
         this.gradeId = gradeId;

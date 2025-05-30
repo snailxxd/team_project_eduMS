@@ -23,7 +23,7 @@ public class Classroom {
     private String type;
 
     // constructors
-    public Classroom() {};
+    public Classroom() {}
 
     public Classroom(String campus, int classroomId, int roomNumber, int capacity, String building) {
         this.campus = campus;

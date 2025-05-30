@@ -38,7 +38,7 @@ public class Section {
     private int time;
 
     // constructors
-    public Section() {};
+    public Section() {}
 
     public Section(int sectionId, int courseId, String semester, int year, int classroomId, JsonNode timeSlotId, int teacherId) {
         this.sectionId = sectionId;

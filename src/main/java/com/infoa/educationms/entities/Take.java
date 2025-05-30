@@ -18,7 +18,7 @@ public class Take {
     private int sectionId;
 
     // constructors
-    public Take() {};
+    public Take() {}
 
     public Take(int takeId, int studentId, int sectionId) {
         this.takeId = takeId;

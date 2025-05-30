@@ -13,7 +13,7 @@ public class Teacher extends User {
     private int salary;
 
     // constructors
-    public Teacher() {};
+    public Teacher() {}
 
     public Teacher(int userId, String accountNumber, String password, int personalInfoId, String deptName, int salary, UserRole userRole) {
         super(userId, accountNumber, password, personalInfoId, userRole);

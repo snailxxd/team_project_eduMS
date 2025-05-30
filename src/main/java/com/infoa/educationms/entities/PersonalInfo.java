@@ -3,7 +3,7 @@ package com.infoa.educationms.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "personal_infomation")
+@Table(name = "personal_information")
 public class PersonalInfo {
 
     @Id

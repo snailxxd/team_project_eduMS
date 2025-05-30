@@ -1,8 +1,6 @@
 package service;
 
-import com.infoa.educationms.entities.PersonalInfo;
-import com.infoa.educationms.entities.Student;
-import com.infoa.educationms.entities.User;
+import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 import com.infoa.educationms.service.EducationMSImp;
 import org.junit.jupiter.api.extension.ExtendWith;      // @ExtendWith
@@ -14,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;       // assertEquals / assert
 import static org.mockito.Mockito.*;                    // when / verify / any() 等 Mockito 静态方法
 
 import com.infoa.educationms.queries.ApiResult;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -114,6 +115,40 @@ public class EducationMSTest {
         assertTrue(result.result);
         assertEquals("查询成功", result.message);
         assertNotNull(result.return_data);
+    }
+
+    @Test
+    public void testQueryGrade_success() {
+        mockSecurityContext("student1");
+        User student = new Student();
+        student.setUserId(1);
+        student.setAccountNumber("student1");
+
+        Take take = new Take();
+        take.setTakeId(10);
+        take.setStudentId(1);
+
+        Grade grade = new Grade();
+        grade.setTakeId(10);
+        grade.setGrade(95);
+
+        when(userRepository.findByAccountNumber("student1")).thenReturn(student);
+        when(takeRepository.findByStudentId(1)).thenReturn(List.of(take));
+        when(gradeRepository.findByTakeId(10)).thenReturn(List.of(grade));
+
+        ApiResult result = educationMS.queryGrade();
+
+        assertTrue(result.result);
+        assertEquals("成绩查询成功", result.message);
+    }
+
+
+    private void mockSecurityContext(String accountNumber) {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(accountNumber);
+        SecurityContext context = mock(SecurityContext.class);
+        when(context.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(context);
     }
 
 }

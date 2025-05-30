@@ -10,7 +10,7 @@ public class Student extends User {
     @Column(name = "dept_name")
     private String deptName;
 
-    @Column(name = "total_credit")
+    @Column(name = "tot_cred")
     private int totalCredit;
 
     // constructors

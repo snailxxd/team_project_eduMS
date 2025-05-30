@@ -20,6 +20,8 @@ public class Classroom {
 
     private String building;
 
+    private String type;
+
     // constructors
     public Classroom() {};
 

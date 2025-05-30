@@ -11,7 +11,7 @@ public class GradeChange {
     @Column(name = "grade_change_id")
     private int changeId;
 
-    @Column(name = "take_id")
+    @Column(name = "takes_id")
     private int takeId;
 
     @Column(name = "teacher_id")
@@ -28,6 +28,9 @@ public class GradeChange {
     @Column(name = "check_time")
     private LocalDateTime checkTime;
 
+    @Column(name = "grade_id")
+    private int gradeId;
+
     // constructors
     public GradeChange() {};
 
@@ -39,6 +42,7 @@ public class GradeChange {
         this.newGrade = newGrade;
         this.applyTime = applyTime;
         this.checkTime = checkTime;
+        this.gradeId = 0;
     }
 
     // 转换为字符串

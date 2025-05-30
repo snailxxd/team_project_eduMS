@@ -1,6 +1,14 @@
 package com.infoa.educationms.entities;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "section")
@@ -20,8 +28,9 @@ public class Section {
     @Column(name = "classroom_id")
     private int classroomId;
 
-    @Column(name = "time_slot_id")
-    private int timeSlotId;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "time_slot_ids", columnDefinition = "json")
+    private JsonNode timeSlotId;
 
     @Column(name = "teacher_id")
     private int teacherId;
@@ -31,7 +40,7 @@ public class Section {
     // constructors
     public Section() {};
 
-    public Section(int sectionId, int courseId, String semester, int year, int classroomId, int timeSlotId, int teacherId) {
+    public Section(int sectionId, int courseId, String semester, int year, int classroomId, JsonNode timeSlotId, int teacherId) {
         this.sectionId = sectionId;
         this.courseId = courseId;
         this.semester = semester;
@@ -95,12 +104,21 @@ public class Section {
         this.classroomId = classroomId;
     }
 
-    public int getTimeSlotId() {
-        return timeSlotId;
+    // 新增方法：获取时间槽ID列表
+    public List<Integer> getTimeSlotIdList() {
+        if (timeSlotId != null && timeSlotId.isArray()) {
+            List<Integer> ids = new ArrayList<>();
+            for (JsonNode node : timeSlotId) {
+                ids.add(node.asInt());
+            }
+            return ids;
+        }
+        return Collections.emptyList();
     }
 
-    public void setTimeSlotId(int timeSlotId) {
-        this.timeSlotId = timeSlotId;
+    // 新增方法：设置时间槽ID列表
+    public void setTimeSlotIdList(List<Integer> ids) {
+        this.timeSlotId = new ObjectMapper().valueToTree(ids);
     }
 
     public int getTeacherId() {

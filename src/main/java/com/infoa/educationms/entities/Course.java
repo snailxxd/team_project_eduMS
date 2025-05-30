@@ -18,10 +18,16 @@ public class Course {
 
     private int credits;
 
+    @Column(name = "course_introduction")
     private String introduction;
 
     private int capacity;
 
+    private String required_room_type;
+
+    private int grade_year;
+
+    private int period;
     // constructors
     public Course() {}
 

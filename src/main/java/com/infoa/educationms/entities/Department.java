@@ -11,21 +11,21 @@ public class Department {
     @Column(name = "dept_name")
     private String deptName;
 
-    private String building;
+    private String campus;
 
     // constructors
     public Department() {}
 
-    public Department(String deptName, String building) {
+    public Department(String deptName, String campus) {
         this.deptName = deptName;
-        this.building = building;
+        this.campus = campus;
     }
 
     // 转换为字符串
     public String toString() {
         return "Department{" +
                 "deptName='" + deptName + '\'' +
-                ", building='" + building + '\'' +
+                ", campus='" + campus + '\'' +
                 '}';
     }
 
@@ -38,11 +38,11 @@ public class Department {
         this.deptName = deptName;
     }
 
-    public String getBuilding() {
-        return building;
+    public String getCampus() {
+        return campus;
     }
 
-    public void setBuilding(String building) {
-        this.building = building;
+    public void setCampus(String campus) {
+        this.campus = campus;
     }
 }

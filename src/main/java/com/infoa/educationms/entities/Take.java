@@ -3,18 +3,18 @@ package com.infoa.educationms.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "take")
+@Table(name = "takes")
 public class Take {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "take_id")
+    @Column(name = "takes_id")
     private int takeId;
 
     @Column(name = "student_id")
     private int studentId;
 
-    @Column(name = "section_id")
+    @Column(name = "sec_id")
     private int sectionId;
 
     // constructors

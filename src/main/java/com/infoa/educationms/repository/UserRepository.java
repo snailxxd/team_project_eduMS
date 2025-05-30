@@ -3,6 +3,8 @@ package com.infoa.educationms.repository;
 import com.infoa.educationms.entities.User;
 import com.infoa.educationms.entities.UserRole;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByAccountNumberContainingAndUserType(String accountNumber, UserRole userType);
 
     // 根据账号查询用户
-    User findByAccountNumber(String accountNumber);
+    Optional<User> findByAccountNumber(String accountNumber);
 }

@@ -1,0 +1,55 @@
+package com.infoa.educationms.entities;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+public class UserDetailsImpl implements UserDetails {
+
+    private final com.infoa.educationms.entities.User user;
+
+    public UserDetailsImpl(com.infoa.educationms.entities.User user) {
+        this.user = user;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(() -> user.getUserType().name()); // 例如 ROLE_ADMIN
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getAccountNumber(); // 这里返回 accountNumber 而不是 username
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public com.infoa.educationms.entities.User getDomainUser() {
+        return user;
+    }
+}

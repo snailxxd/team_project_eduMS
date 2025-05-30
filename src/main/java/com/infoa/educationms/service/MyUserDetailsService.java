@@ -19,7 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String accountNumber) throws UsernameNotFoundException {
         com.infoa.educationms.entities.User user = userRepository
-                .findByAccountNumber(accountNumber) // 👈 注意是 accountNumber
+                .findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new UsernameNotFoundException("账号不存在: " + accountNumber));
 
         return new UserDetailsImpl(user);

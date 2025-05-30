@@ -16,7 +16,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> user.getUserType().name()); // 例如 ROLE_ADMIN
+        return List.of(() -> user.getUserType().name());
     }
 
     @Override
@@ -26,7 +26,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getAccountNumber(); // 这里返回 accountNumber 而不是 username
+        return user.getAccountNumber();
     }
 
     @Override

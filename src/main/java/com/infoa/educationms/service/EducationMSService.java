@@ -9,9 +9,8 @@ import com.infoa.educationms.entities.Grade;
 import com.infoa.educationms.entities.PersonalInfo;
 import com.infoa.educationms.entities.Section;
 import com.infoa.educationms.queries.ApiResult;
-import org.springframework.stereotype.Service;
 
-public interface EducationMS {
+public interface EducationMSService {
     // 通用模块接口
     ApiResult getPersonalInfo(int userId);               // 查询个人信息
     ApiResult updatePersonalInfo(int userId, PersonalInfo info);  // 更新个人信息和头像

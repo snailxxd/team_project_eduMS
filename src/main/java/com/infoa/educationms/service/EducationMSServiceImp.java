@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class EducationMSImp implements EducationMS {
+public class EducationMSServiceImp implements EducationMSService {
 
     @Autowired
     private UserRepository userRepository;

@@ -3,7 +3,6 @@ package com.infoa.educationms.controller;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.service.EducationMSService;
-import com.infoa.educationms.service.EducationMSServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

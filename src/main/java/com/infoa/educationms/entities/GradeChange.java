@@ -34,7 +34,7 @@ public class GradeChange {
     // constructors
     public GradeChange() {};
 
-    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime) {
+    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId) {
         this.changeId = changeId;
         this.takeId = takeId;
         this.teacherId = teacherId;
@@ -42,7 +42,7 @@ public class GradeChange {
         this.newGrade = newGrade;
         this.applyTime = applyTime;
         this.checkTime = checkTime;
-        this.gradeId = 0;
+        this.gradeId = gradeId;
     }
 
     // 转换为字符串
@@ -55,6 +55,7 @@ public class GradeChange {
                 ", newGrade=" + newGrade +
                 ", applyTime=" + applyTime +
                 ", checkTime=" + checkTime +
+                ", gradeId=" + gradeId +
                 '}';
     }
 
@@ -113,5 +114,13 @@ public class GradeChange {
 
     public void setCheckTime(LocalDateTime checkTime) {
         this.checkTime = checkTime;
+    }
+
+    public int getGradeId() {
+        return gradeId;
+    }
+
+    public void setGradeId(int gradeId) {
+        this.gradeId = gradeId;
     }
 }

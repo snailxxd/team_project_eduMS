@@ -10,7 +10,7 @@ public class Grade {
     @Column(name = "grade_id")
     private int gradeId;
 
-    @Column(name = "grade_type")
+    @Column(name = "type")
     private String gradeType;
 
     @Column(name = "take_id")

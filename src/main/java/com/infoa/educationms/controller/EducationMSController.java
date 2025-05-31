@@ -140,6 +140,16 @@ public class EducationMSController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 获取全体师生用户信息
+     * @return 包含全体师生信息的响应
+     */
+    @GetMapping("/admin/users/all-teachers-students")
+    public ResponseEntity<ApiResult> getAllTeachersAndStudents() {
+        ApiResult result = service.getAllTeachersAndStudents();
+        return ResponseEntity.ok(result);
+    }
+
     //教师模块接口
     
     /**

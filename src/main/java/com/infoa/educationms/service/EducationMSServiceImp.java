@@ -148,11 +148,31 @@ public class EducationMSServiceImp implements EducationMSService {
     @Override
     public ApiResult searchUser(String keyword, UserRole role) {
         if (!isAdmin()) {
-            return new ApiResult(false, "权限不足：仅管理员可搜索用户");
+        return new ApiResult(false, "权限不足：仅管理员可搜索用户");
         }
-        List<User> users = userRepository.findByAccountNumberContainingAndUserType(keyword, role);
+    
+        List<User> users;
+        
+        // 如果没有提供搜索条件，则返回所有用户
+        if ((keyword == null || keyword.isEmpty()) && role == null) {
+            users = userRepository.findAll();
+        } 
+        // 如果只提供了关键字
+        else if (role == null) {
+            users = userRepository.findByAccountNumberContaining(keyword);
+        }
+        // 如果只提供了角色
+        else if (keyword == null || keyword.isEmpty()) {
+            users = userRepository.findByUserType(role);
+        }
+        // 如果同时提供了关键字和角色
+        else {
+            users = userRepository.findByAccountNumberContainingAndUserType(keyword, role);
+        }
+        
         return new ApiResult(true, "查询成功", new UserList(users));
     }
+
 
     @Override
     public ApiResult updateUser() {
@@ -192,6 +212,24 @@ public class EducationMSServiceImp implements EducationMSService {
         change.setCheckTime(LocalDateTime.now());
         gradeChangeRepository.save(change);
         return new ApiResult(true, "审核操作完成");
+    }
+
+    @Override
+    public ApiResult getAllTeachersAndStudents() {
+        if (!isAdmin()) {
+            return new ApiResult(false, "权限不足：仅管理员可执行此操作");
+        }
+        
+        // 获取所有老师和学生
+        List<User> teachers = userRepository.findByUserType(UserRole.ROLE_TEACHER);
+        List<User> students = userRepository.findByUserType(UserRole.ROLE_STUDENT);
+        
+        // 合并结果
+        List<User> allTeachersAndStudents = new ArrayList<>();
+        allTeachersAndStudents.addAll(teachers);
+        allTeachersAndStudents.addAll(students);
+        
+        return new ApiResult(true, "获取全体师生成功", new UserList(allTeachersAndStudents));
     }
 
     //---------------------------- 教师模块接口实现 -----------------------------//
@@ -284,6 +322,7 @@ public class EducationMSServiceImp implements EducationMSService {
         change.setNewGrade(newGrade);
         change.setApplyTime(LocalDateTime.now());
         change.setResult(false);
+        grade.setGrade(newGrade);
         gradeChangeRepository.save(change);
         return new ApiResult(true, "成绩修改申请已提交");
     }

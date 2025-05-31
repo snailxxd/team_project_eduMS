@@ -17,4 +17,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // 根据账号查询用户
     Optional<User> findByAccountNumber(String accountNumber);
+
+    // 根据关键字搜索账号
+    List<User> findByAccountNumberContaining(String keyword);
+    
+    // 根据角色查询用户
+    List<User> findByUserType(UserRole role);
+    
+    // 查询所有用户
+    List<User> findAll();
 }

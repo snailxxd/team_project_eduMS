@@ -26,6 +26,7 @@ public interface EducationMSService {
     ApiResult searchUser(String keyword, UserRole role);  // 查询用户
     ApiResult updateUser();  // 更新用户
     ApiResult auditGradeChange(int changeId, boolean isApproved); // 审核成绩变更
+    ApiResult getAllTeachersAndStudents(); // 获取全体师生信息
 
     // 教师模块接口
     ApiResult addSection(Section section);   // 添加开课信息

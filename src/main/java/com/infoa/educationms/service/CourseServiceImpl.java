@@ -6,9 +6,6 @@ import com.infoa.educationms.DTO.StudentRankDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -40,10 +37,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String account = authentication.getName();
-        return userRepository.findByAccountNumber(account)
-                .orElseThrow(() -> new UsernameNotFoundException("用户不存在：" + account));
+        return null;
     }
 
     private boolean isTeacher() {
@@ -85,9 +79,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDTO addCourse(CourseDTO dto) {
-        if (!isTeacher()) {
-            throw new SecurityException("仅教师可添加课程");
-        }
+         if (!isTeacher()) {
+           throw new SecurityException("仅教师可添加课程");
+         }
 
         // 先创建或更新 Course 实体
         Course course = new Course();

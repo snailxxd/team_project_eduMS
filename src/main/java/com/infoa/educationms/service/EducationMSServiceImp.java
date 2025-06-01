@@ -6,9 +6,6 @@ import com.infoa.educationms.queries.GradeDetail;
 import com.infoa.educationms.queries.UserList;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -377,11 +374,7 @@ public class EducationMSServiceImp implements EducationMSService {
     }
 
     private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String account = authentication.getName(); // 当前登录用户名
-
-        return userRepository.findByAccountNumber(account)
-                .orElseThrow(() -> new UsernameNotFoundException("用户不存在，账号：" + account));
+        return null;
     }
 
     private int getCurrentUserId() {

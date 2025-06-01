@@ -6,9 +6,6 @@ import com.infoa.educationms.DTO.TeacherDTO;
 import com.infoa.educationms.DTO.UserDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -37,13 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String account = authentication.getName(); // 当前登录用户名
-
-        User user = userRepository.findByAccountNumber(account)
-                .orElseThrow(() -> new UsernameNotFoundException("用户不存在，账号：" + account));
-
-        return toUserDTO(user);  // 你之前实现的实体转DTO方法
+        return null;
     }
 
     // ===== 搜索用户（基于关键字+角色过滤） =====

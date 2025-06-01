@@ -90,13 +90,13 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
         List<Teacher> teachers = teacherRepository.findAll();
 
         // 2. 批量获取关联的PersonalInfo
-        Map<Integer, PersonalInfo> personalInfoMap = personalInfoRepository.findAllById(
+        Map<Integer, PersonalInfor> personalInfoMap = personalInfoRepository.findAllById(
                         teachers.stream()
                                 .map(Teacher::getPersonalInfoId)
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toList())
                 ).stream()
-                .collect(Collectors.toMap(PersonalInfo::getPersonalInfoId, p -> p));
+                .collect(Collectors.toMap(PersonalInfor::getPersonalInfoId, p -> p));
 
         // 3. 转换为DTO
         return teachers.stream()
@@ -104,14 +104,14 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
                 .collect(Collectors.toList());
     }
 
-    private CaTeacherDTO convertToTeacherDTO(Teacher teacher, Map<Integer, PersonalInfo> personalInfoMap) {
+    private CaTeacherDTO convertToTeacherDTO(Teacher teacher, Map<Integer, PersonalInfor> personalInfoMap) {
         // 获取PersonalInfo
-        PersonalInfo personalInfo = teacher.getPersonalInfoId() != 0 ?
+        PersonalInfor personalInfor = teacher.getPersonalInfoId() != 0 ?
                 personalInfoMap.get(teacher.getPersonalInfoId()) : null;
 
         return new CaTeacherDTO(
                 teacher.getUserId(),
-                personalInfo != null ? personalInfo.getName() : "未知教师", // 从PersonalInfo获取姓名
+                personalInfor != null ? personalInfor.getName() : "未知教师", // 从PersonalInfo获取姓名
                 teacher.getDeptName()
         );
     }

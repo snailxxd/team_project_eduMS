@@ -50,12 +50,12 @@ public class EducationMSServiceImp implements EducationMSService {
         if (user == null) {
             return new ApiResult(false, "用户不存在");
         }
-        PersonalInfo info = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
+        PersonalInfor info = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
         return new ApiResult(true, "查询成功", info);
     }
 
     @Override
-    public ApiResult updatePersonalInfo(int userId, PersonalInfo info) {
+    public ApiResult updatePersonalInfo(int userId, PersonalInfor info) {
         User currentUser = getCurrentUser();
         // 管理员或用户本人可修改
         if (!currentUser.getUserType().equals(UserRole.ROLE_ADMIN)) {
@@ -63,7 +63,7 @@ public class EducationMSServiceImp implements EducationMSService {
                 return new ApiResult(false, "无权修改他人信息");
             }
         }
-        PersonalInfo existingInfo = personalInfoRepository.findById(info.getPersonalInfoId()).orElse(null);
+        PersonalInfor existingInfo = personalInfoRepository.findById(info.getPersonalInfoId()).orElse(null);
         if (existingInfo == null) {
             return new ApiResult(false, "个人信息不存在");
         }

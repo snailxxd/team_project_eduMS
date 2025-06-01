@@ -6,14 +6,14 @@ import com.infoa.educationms.entities.UserRole;
 import java.util.List;
 
 import com.infoa.educationms.entities.Grade;
-import com.infoa.educationms.entities.PersonalInfo;
+import com.infoa.educationms.entities.PersonalInfor;
 import com.infoa.educationms.entities.Section;
 import com.infoa.educationms.queries.ApiResult;
 
 public interface EducationMSService {
     // 通用模块接口
     ApiResult getPersonalInfo(int userId);               // 查询个人信息
-    ApiResult updatePersonalInfo(int userId, PersonalInfo info);  // 更新个人信息和头像
+    ApiResult updatePersonalInfo(int userId, PersonalInfor info);  // 更新个人信息和头像
     ApiResult querySection();    // 查询课程信息
 
     // 学生模块接口

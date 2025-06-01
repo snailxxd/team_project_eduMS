@@ -72,13 +72,13 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
         List<Student> students = studentRepository.findAllById(studentIds);
 
         // 4. 批量获取关联的PersonalInfo
-        Map<Integer, PersonalInfo> personalInfoMap = personalInfoRepository.findAllById(
+        Map<Integer, PersonalInfor> personalInfoMap = personalInfoRepository.findAllById(
                         students.stream()
                                 .map(Student::getPersonalInfoId)
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toList())
                 ).stream()
-                .collect(Collectors.toMap(PersonalInfo::getPersonalInfoId, p -> p));
+                .collect(Collectors.toMap(PersonalInfor::getPersonalInfoId, p -> p));
 
         // 5. 转换为DTO
         return students.stream()
@@ -86,14 +86,14 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
                 .collect(Collectors.toList());
     }
 
-    private OqStudentDTO convertToOqStudentDTO(Student student, Map<Integer, PersonalInfo> personalInfoMap) {
+    private OqStudentDTO convertToOqStudentDTO(Student student, Map<Integer, PersonalInfor> personalInfoMap) {
         // 获取PersonalInfo
-        PersonalInfo personalInfo = student.getPersonalInfoId() != 0 ?
+        PersonalInfor personalInfor = student.getPersonalInfoId() != 0 ?
                 personalInfoMap.get(student.getPersonalInfoId()) : null;
 
         return new OqStudentDTO(
                 student.getUserId(),
-                personalInfo != null ? personalInfo.getName() : "未知学生", // 从PersonalInfo获取姓名
+                personalInfor != null ? personalInfor.getName() : "未知学生", // 从PersonalInfo获取姓名
                 student.getDeptName()
         );
     }
@@ -129,7 +129,7 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
                     // 可以进一步查询教师详细信息，例如姓名
                      Optional<Teacher> teacher = teacherRepository.findById(teacherId);
                      if (teacher.isPresent()) {
-                         Optional<PersonalInfo> personalInfo = personalInfoRepository.findById(teacher.get().getPersonalInfoId());
+                         Optional<PersonalInfor> personalInfo = personalInfoRepository.findById(teacher.get().getPersonalInfoId());
                          if (personalInfo.isPresent()) {
                              teacherName = personalInfo.get().getName();
                          }

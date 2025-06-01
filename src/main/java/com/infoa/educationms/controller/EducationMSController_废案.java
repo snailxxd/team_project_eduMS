@@ -42,7 +42,7 @@ public class EducationMSController_废案 {
     @PutMapping("/users/{userId}/personal-info")
     public ResponseEntity<ApiResult> updatePersonalInfo(
             @PathVariable int userId, 
-            @RequestBody PersonalInfo info) {
+            @RequestBody PersonalInfor info) {
         ApiResult result = service.updatePersonalInfo(userId, info);
         return ResponseEntity.ok(result);
     }

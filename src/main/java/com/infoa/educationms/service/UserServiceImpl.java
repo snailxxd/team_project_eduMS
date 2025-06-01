@@ -67,21 +67,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO addUser(UserDTO userDTO) {
         // 先处理 PersonalInfo
-        PersonalInfo personalInfo;
+        PersonalInfor personalInfor;
         if (userDTO.getPersonalInforId() != null && userDTO.getPersonalInforId() > 0) {
-            personalInfo = personalInfoRepository.findById(userDTO.getPersonalInforId())
-                    .orElse(new PersonalInfo());
+            personalInfor = personalInfoRepository.findById(userDTO.getPersonalInforId())
+                    .orElse(new PersonalInfor());
         } else {
-            personalInfo = new PersonalInfo();
+            personalInfor = new PersonalInfor();
         }
 
         // 设置个人信息字段（这里假设至少要设置姓名，其他可按需设置）
-        personalInfo.setName(userDTO.getName() != null ? userDTO.getName() : "默认姓名");
-        personalInfo.setPhoneNumber(userDTO.getPhoneNumber());
-        personalInfo.setPicture(userDTO.getPicture());
+        personalInfor.setName(userDTO.getName() != null ? userDTO.getName() : "默认姓名");
+        personalInfor.setPhoneNumber(userDTO.getPhoneNumber());
+        personalInfor.setPicture(userDTO.getPicture());
 
         // 保存 PersonalInfo
-        personalInfo = personalInfoRepository.save(personalInfo);
+        personalInfor = personalInfoRepository.save(personalInfor);
 
         // 创建 User 实体，注意 User 是抽象类，需要根据类型实例化具体子类
         User userEntity;
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setAccountNumber(userDTO.getAccountNumber());
         // 这里密码没带，创建时可以默认或者前端传入再传DTO里
         userEntity.setPassword("default_password");
-        userEntity.setPersonalInfoId(personalInfo.getPersonalInfoId());
+        userEntity.setPersonalInfoId(personalInfor.getPersonalInfoId());
         userEntity.setUserType(UserRole.valueOf(type.toUpperCase()));
 
         // 保存 User
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
         List<Student> students = studentRepository.findAll();
         return students.stream()
                 .map(s -> {
-                    PersonalInfo pi = personalInfoRepository.findById(s.getPersonalInfoId()).orElse(null);
+                    PersonalInfor pi = personalInfoRepository.findById(s.getPersonalInfoId()).orElse(null);
                     return toStudentDTO(s, pi);
                 })
                 .collect(Collectors.toList());
@@ -135,13 +135,13 @@ public class UserServiceImpl implements UserService {
     public StudentDTO getStudentById(int userId) {
         Student s = studentRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Student不存在"));
-        PersonalInfo pi = personalInfoRepository.findById(s.getPersonalInfoId()).orElse(null);
+        PersonalInfor pi = personalInfoRepository.findById(s.getPersonalInfoId()).orElse(null);
         return toStudentDTO(s, pi);
     }
 
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        PersonalInfo pi = new PersonalInfo();
+        PersonalInfor pi = new PersonalInfor();
         pi.setName(studentDTO.getName());
         pi.setPhoneNumber(studentDTO.getPhoneNumber());
         pi.setPicture(studentDTO.getPicture());
@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
     public StudentDTO updateStudent(int userId, StudentDTO studentDTO) {
         Student student = studentRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Student不存在"));
-        PersonalInfo pi = personalInfoRepository.findById(student.getPersonalInfoId())
+        PersonalInfor pi = personalInfoRepository.findById(student.getPersonalInfoId())
                 .orElseThrow(() -> new RuntimeException("PersonalInfo不存在"));
 
         // 更新个人信息
@@ -184,13 +184,13 @@ public class UserServiceImpl implements UserService {
     public TeacherDTO getTeacherById(int userId) {
         Teacher teacher = teacherRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Teacher不存在"));
-        PersonalInfo pi = personalInfoRepository.findById(teacher.getPersonalInfoId()).orElse(null);
+        PersonalInfor pi = personalInfoRepository.findById(teacher.getPersonalInfoId()).orElse(null);
         return toTeacherDTO(teacher, pi);
     }
 
     @Override
     public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
-        PersonalInfo pi = new PersonalInfo();
+        PersonalInfor pi = new PersonalInfor();
         pi.setName(teacherDTO.getName());
         pi.setPhoneNumber(teacherDTO.getPhoneNumber());
         pi.setPicture(teacherDTO.getPicture());
@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService {
     public TeacherDTO updateTeacher(int userId, TeacherDTO teacherDTO) {
         Teacher teacher = teacherRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Teacher不存在"));
-        PersonalInfo pi = personalInfoRepository.findById(teacher.getPersonalInfoId())
+        PersonalInfor pi = personalInfoRepository.findById(teacher.getPersonalInfoId())
                 .orElseThrow(() -> new RuntimeException("PersonalInfo不存在"));
 
         pi.setName(teacherDTO.getName());
@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
     // ===== 管理员管理 =====
     @Override
     public AdministratorDTO createAdmin(AdministratorDTO adminDTO) {
-        PersonalInfo pi = new PersonalInfo();
+        PersonalInfor pi = new PersonalInfor();
         pi.setName(adminDTO.getName());
         pi.setPhoneNumber(adminDTO.getPhoneNumber());
         pi.setPicture(adminDTO.getPicture());
@@ -248,11 +248,11 @@ public class UserServiceImpl implements UserService {
 
     // ===== 辅助方法：实体转DTO =====
     private UserDTO toUserDTO(User user) {
-        PersonalInfo pi = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
+        PersonalInfor pi = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
         return toUserDTO(user, pi);
     }
 
-    private UserDTO toUserDTO(User user, PersonalInfo pi) {
+    private UserDTO toUserDTO(User user, PersonalInfor pi) {
         UserDTO dto = new UserDTO();
         dto.setUserId(user.getUserId());
         dto.setAccountNumber(user.getAccountNumber());
@@ -266,7 +266,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    private StudentDTO toStudentDTO(Student student, PersonalInfo pi) {
+    private StudentDTO toStudentDTO(Student student, PersonalInfor pi) {
         StudentDTO dto = new StudentDTO();
         dto.setUserId(student.getUserId());
         dto.setAccountNumber(student.getAccountNumber());
@@ -282,7 +282,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    private TeacherDTO toTeacherDTO(Teacher teacher, PersonalInfo pi) {
+    private TeacherDTO toTeacherDTO(Teacher teacher, PersonalInfor pi) {
         TeacherDTO dto = new TeacherDTO();
         dto.setUserId(teacher.getUserId());
         dto.setAccountNumber(teacher.getAccountNumber());
@@ -298,7 +298,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    private AdministratorDTO toAdminDTO(Admin admin, PersonalInfo pi) {
+    private AdministratorDTO toAdminDTO(Admin admin, PersonalInfor pi) {
         AdministratorDTO dto = new AdministratorDTO();
         dto.setUserId(admin.getUserId());
         dto.setAccountNumber(admin.getAccountNumber());

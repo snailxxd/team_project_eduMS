@@ -1,7 +1,7 @@
 package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.PersonalInfoDTO;
-import com.infoa.educationms.entities.PersonalInfo;
+import com.infoa.educationms.entities.PersonalInfor;
 import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.service.EducationMSService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class PersonalInfoController {
     @PostMapping("/personal-information")
     public ResponseEntity<ApiResult> createPersonalInfo(@RequestParam int userId, @RequestBody PersonalInfoDTO dto) {
         // 实际上服务层没有创建，只能用 updatePersonalInfo 来设置或更新
-        PersonalInfo info = convertToEntity(dto);
+        PersonalInfor info = convertToEntity(dto);
         ApiResult result = educationMSService.updatePersonalInfo(userId, info);
         return ResponseEntity.ok(result);
     }
@@ -27,13 +27,13 @@ public class PersonalInfoController {
     public ResponseEntity<ApiResult> updatePersonalInfo(
             @PathVariable Integer userId,
             @RequestBody PersonalInfoDTO dto) {
-        PersonalInfo info = convertToEntity(dto);
+        PersonalInfor info = convertToEntity(dto);
         ApiResult result = educationMSService.updatePersonalInfo(userId, info);
         return ResponseEntity.ok(result);
     }
 
-    private PersonalInfo convertToEntity(PersonalInfoDTO dto) {
-        PersonalInfo info = new PersonalInfo();
+    private PersonalInfor convertToEntity(PersonalInfoDTO dto) {
+        PersonalInfor info = new PersonalInfor();
         info.setName(dto.getName());
 
         return info;

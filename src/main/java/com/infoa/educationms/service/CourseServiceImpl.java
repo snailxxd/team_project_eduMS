@@ -245,7 +245,7 @@ public class CourseServiceImpl implements CourseService {
 
             String studentName = studentRepository.findById(g.getTakeId())
                     .map(student -> personalInfoRepository.findById(student.getPersonalInfoId())
-                            .map(PersonalInfo::getName)
+                            .map(PersonalInfor::getName)
                             .orElse("未知"))
                     .orElse("未知");
 

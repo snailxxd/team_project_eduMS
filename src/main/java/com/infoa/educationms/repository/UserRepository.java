@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 根据账号查询用户
     Optional<User> findByAccountNumber(String accountNumber);
 
+    User findOneByUserId(Integer userId);
+
     // 根据关键字搜索账号
     List<User> findByAccountNumberContaining(String keyword);
     

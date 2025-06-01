@@ -12,5 +12,4 @@ public class GradeDTO {
     private String studentName;
     private Integer courseId;
     private String courseName;
-
 }

@@ -90,21 +90,24 @@ public class CourseServiceImpl implements CourseService {
         course.setCredits(dto.getCredits());
         course.setIntroduction(dto.getCourseIntroduction());
         course.setCapacity(dto.getCapacity());
+        course.setRequiredRoomType(dto.getRequiredRoomType());
+        course.setPeriod(dto.getPeriod());
+        course.setGradeYear(dto.getGradeYear());
 
         course = courseRepository.save(course);
 
-        // 创建 Section，表示该课程的一个开课区段
-        Section section = new Section();
-        section.setCourseId(course.getCourseId());
-        section.setTeacherId(getCurrentUserId());
-        section.setYear(dto.getGradeYear());
-        section.setSemester("");  // 这里示例设置，实际根据 dto 补充
-        section.setClassroomId(0); // 需要从 dto 或前端补充
-        // 其它 Section 字段根据 dto 补充
+        CourseDTO dto2 = new CourseDTO();
+        dto2.setCourseId(course.getCourseId());
+        dto2.setTitle(course.getTitle());
+        dto2.setDeptName(course.getDeptName());
+        dto2.setCredits(course.getCredits());
+        dto2.setCourseIntroduction(course.getIntroduction());
+        dto2.setCapacity(course.getCapacity());
+        dto2.setRequiredRoomType(course.getRequiredRoomType());
+        dto2.setGradeYear(course.getGradeYear());
+        dto2.setPeriod(course.getPeriod());
 
-        section = sectionRepository.save(section);
-
-        return toCourseDTO(section, course);
+        return dto2;
     }
 
 
@@ -138,7 +141,7 @@ public class CourseServiceImpl implements CourseService {
         // 其它 Section 字段根据 dto 补充
         sectionRepository.save(section);
 
-        return toCourseDTO(section, course);
+        return null;
     }
 
 
@@ -263,21 +266,5 @@ public class CourseServiceImpl implements CourseService {
         return 0.0;
     }
 
-
-    private CourseDTO toCourseDTO(Section section, Course course) {
-        CourseDTO dto = new CourseDTO();
-        dto.setCourseId(course.getCourseId());
-        dto.setTitle(course.getTitle());
-        dto.setDeptName(course.getDeptName());
-        dto.setCredits(course.getCredits());
-        dto.setCourseIntroduction(course.getIntroduction());
-        dto.setCapacity(course.getCapacity());
-
-        dto.setRequiredRoomType("未知");  // 如果有数据则替换
-        dto.setGradeYear(section.getYear());
-        dto.setPeriod(1);  // 可根据timeSlotId解析真实课时数
-
-        return dto;
-    }
 
 }

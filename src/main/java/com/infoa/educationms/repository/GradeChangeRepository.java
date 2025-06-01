@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface GradeChangeRepository extends JpaRepository<GradeChange, Integer> {
-    List<GradeChange> findByResultIsNull();
+
+    List<Boolean> findResultByGradeId(Integer gradeId);
+    List<GradeChange> findByGradeId(Integer gradeId);
 }

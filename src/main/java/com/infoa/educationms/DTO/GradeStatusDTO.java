@@ -7,11 +7,10 @@ public class GradeStatusDTO {
     private String id;
     private Integer studentId;
     private String studentName;
-    private String courseId;
+    private Integer courseId;
     private String courseName;
-    private String grade;
+    private Integer grade;
     private String status;
-    private Boolean hasApplicationListener;
 
 }
 

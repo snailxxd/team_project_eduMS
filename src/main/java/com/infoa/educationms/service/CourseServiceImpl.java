@@ -68,9 +68,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDTO addCourse(CourseDTO dto) {
-         if (!isTeacher()) {
-           throw new SecurityException("仅教师可添加课程");
-         }
+         // if (!isTeacher()) {
+         //  throw new SecurityException("仅教师可添加课程");
+         // }
 
          // 先创建或更新 Course 实体
          Course course = new Course();

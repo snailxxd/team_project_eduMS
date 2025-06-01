@@ -109,7 +109,7 @@ public class CourseServiceImpl implements CourseService {
         course.setGradeYear(dto.getGradeYear());
         courseRepository.save(course);
 
-        List<Section> sections = sectionRepository.findAllByCourseId(courseId);
+        List<Section> sections = sectionRepository.findByCourseId(courseId);
 
         for (Section section : sections) {
             section.setYear(dto.getGradeYear());

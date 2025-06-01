@@ -33,11 +33,4 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
      */
     Optional<Section> findFirstByCourseId(Integer courseId);
 
-    Arrays findByCourseIdIn(List<Integer> courseIds);
-
-    /**
-     * 查询所有section
-     * @return 所有section列表
-     */
-    List<Section> findAllByCourseId(int courseId);
 }

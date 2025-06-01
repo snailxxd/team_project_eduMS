@@ -1,7 +1,6 @@
 package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.*;
-import com.infoa.educationms.entities.*;
 
 import com.infoa.educationms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

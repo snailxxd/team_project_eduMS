@@ -72,22 +72,20 @@ public class CourseServiceImpl implements CourseService {
            throw new SecurityException("仅教师可添加课程");
          }
 
-        // 先创建或更新 Course 实体
-        Course course = new Course();
-        course.setTitle(dto.getTitle());
-        course.setDeptName(dto.getDeptName());
-        course.setCredits(dto.getCredits());
-        course.setIntroduction(dto.getCourseIntroduction());
-        course.setCapacity(dto.getCapacity());
-        course.setRequiredRoomType(dto.getRequiredRoomType());
-        course.setPeriod(dto.getPeriod());
-        course.setGradeYear(dto.getGradeYear());
+         // 先创建或更新 Course 实体
+         Course course = new Course();
+         course.setTitle(dto.getTitle());
+         course.setDeptName(dto.getDeptName());
+         course.setCredits(dto.getCredits());
+         course.setIntroduction(dto.getCourseIntroduction());
+         course.setCapacity(dto.getCapacity());
+         course.setRequiredRoomType(dto.getRequiredRoomType());
+         course.setPeriod(dto.getPeriod());
+         course.setGradeYear(dto.getGradeYear());
 
-        course = courseRepository.save(course);
+         course = courseRepository.save(course);
 
-        CourseDTO dto2 = toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
-
-        return dto2;
+         return toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
     }
 
 
@@ -125,12 +123,8 @@ public class CourseServiceImpl implements CourseService {
         sectionRepository.save(section);
 
         // 返回更新后的 CourseDTO
-        CourseDTO updatedDto = toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
-
-        return updatedDto;
+        return toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
     }
-
-
 
 
     @Override

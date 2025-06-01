@@ -8,7 +8,7 @@ public class PersonalInfor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "personal_infor_id")
     private int personalInforId;
 
     private String name;

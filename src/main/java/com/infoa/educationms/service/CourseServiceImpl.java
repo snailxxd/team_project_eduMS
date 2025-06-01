@@ -124,9 +124,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseStatsDTO getCourseStats(int sectionId) {
-        if (!isTeacher()) {
-            throw new SecurityException("仅教师可查看课程统计信息");
-        }
         Section section = sectionRepository.findById(sectionId).orElse(null);
         if (section == null || section.getTeacherId() != getCurrentUserId()) {
             throw new SecurityException("无权查看该课程");
@@ -171,9 +168,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<StudentRankDTO> getCourseStudentRanks(int sectionId) {
-        if (!isTeacher()) {
-            throw new SecurityException("仅教师可查看学生成绩排名");
-        }
         Section section = sectionRepository.findById(sectionId).orElse(null);
         if (section == null || section.getTeacherId() != getCurrentUserId()) {
             throw new SecurityException("无权查看该课程学生成绩");

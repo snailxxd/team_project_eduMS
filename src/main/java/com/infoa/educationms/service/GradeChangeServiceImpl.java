@@ -90,7 +90,7 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         Student student = studentRepository.findOneByUserId(take.getStudentId());
         Section section = sectionRepository.findOneBySectionId(take.getSectionId());
         Course course = courseRepository.findOneByCourseId(section.getCourseId());
-        PersonalInfor personalInfor = personalInfoRepository.findOneByPersonalInfoId(student.getPersonalInfoId());
+        PersonalInfor personalInfor = personalInfoRepository.findOneByPersonalInforId(student.getPersonalInfoId());
         Grade grade = gradeRepository.findOneByGradeId(gradeChange.getGradeId());
         // 复制基础字段
         dto.setGradeChangeId(gradeChange.getChangeId());

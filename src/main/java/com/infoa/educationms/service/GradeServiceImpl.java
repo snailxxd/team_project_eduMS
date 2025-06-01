@@ -42,7 +42,7 @@ public class GradeServiceImpl implements GradeService {
         List<GradeDTO> gradeDTOS = new ArrayList<>();
 
         User user = userRepository.findOneByUserId(studentId);
-        PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInfoId(user.getPersonalInfoId());
+        PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
 
         for (Take take : takes) {
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
@@ -107,7 +107,7 @@ public class GradeServiceImpl implements GradeService {
             for (Take take : takes) {
                 GradeStatusDTO gradestatusDTO = new GradeStatusDTO();
                 User user = userRepository.findOneByUserId(take.getStudentId());
-                PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInfoId(user.getPersonalInfoId());
+                PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
 
                 List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
                 double sum = 0;

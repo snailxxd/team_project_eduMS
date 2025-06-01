@@ -9,7 +9,7 @@ public class PersonalInfor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userid;
+    private int personalInforId;
 
     private String name;
 
@@ -22,7 +22,7 @@ public class PersonalInfor {
     public PersonalInfor() {}
 
     public PersonalInfor(int userid, String name, String phoneNumber, String picture) {
-        this.userid = userid;
+        this.personalInforId = userid;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.picture = picture;
@@ -31,7 +31,7 @@ public class PersonalInfor {
     // 转换为字符串
     public String toString() {
         return "PersonalInfo{" +
-                "personalInfoId=" + userid +
+                "personalInfoId=" + personalInforId +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", picture='" + picture + '\'' +
@@ -40,11 +40,11 @@ public class PersonalInfor {
 
     // getter and setter methods
     public int getPersonalInfoId() {
-        return userid;
+        return personalInforId;
     }
 
-    public void setPersonalInfoId(int personalInfoId) {
-        this.userid = personalInfoId;
+    public void setPersonalInfoId(int personalInforId) {
+        this.personalInforId = personalInforId;
     }
 
     public String getName() {

@@ -47,24 +47,24 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseDTO> getAllCourses() {
-        List<Section> sections = sectionRepository.findAll();
+        List<Course> courses = courseRepository.findAll();
 
-        return sections.stream()
-                .map(section -> {
-                    // 根据 section 中的 courseId 查找 Course 实体
-                    Optional<Course> courseOpt = courseRepository.findById(section.getCourseId());
-                    if (courseOpt.isEmpty()) return null;
-
-                    Course course = courseOpt.get();
-
-                    CourseDTO dto = toCourseDTO(course, "Unknown", section.getYear(), 1);
-
+        return courses.stream()
+                .map(course -> {
+                    CourseDTO dto = new CourseDTO();
+                    dto.setCourseId(course.getCourseId());
+                    dto.setTitle(course.getTitle());
+                    dto.setDeptName(course.getDeptName());
+                    dto.setCredits(course.getCredits());
+                    dto.setCourseIntroduction(course.getIntroduction());
+                    dto.setCapacity(course.getCapacity());
+                    dto.setRequiredRoomType(course.getRequiredRoomType());
+                    dto.setGradeYear(course.getGradeYear());
+                    dto.setPeriod(course.getPeriod());
                     return dto;
                 })
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public CourseDTO addCourse(CourseDTO dto) {
@@ -248,7 +248,7 @@ public class CourseServiceImpl implements CourseService {
         return 0.0;
     }
 
-    private static CourseDTO toCourseDTO(Course course, String course1, int course2, int course3) {
+    private static CourseDTO toCourseDTO(Course course, String course1, Integer course2, int course3) {
         CourseDTO updatedDto = new CourseDTO();
         updatedDto.setCourseId(course.getCourseId());
         updatedDto.setTitle(course.getTitle());

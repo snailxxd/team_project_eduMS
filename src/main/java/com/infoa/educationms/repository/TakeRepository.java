@@ -32,7 +32,7 @@ public interface TakeRepository extends JpaRepository<Take, Integer> {
     Take findOneByTakeId(Integer takeId);
 
     List<Take> findBySectionId(Integer sectionId);
-
+    Take findOneBySectionId(Integer sectionId);
     /**
      * 根据学生ID查询所有选课记录
      * @param studentId 学生用户ID

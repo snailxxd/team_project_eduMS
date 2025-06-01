@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CourseStatsDTO {
+    private Integer teacherId;
     private Integer courseId;
     private String courseName;
     private Double average;

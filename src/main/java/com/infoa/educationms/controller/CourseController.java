@@ -43,9 +43,9 @@ public class CourseController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<CourseStatsDTO> getCourseStats() {
+    public ResponseEntity<List<CourseStatsDTO>> getCourseStats(Integer teacherId) {
         // 这里传入-1代表全局统计，您可以根据需要调整
-        CourseStatsDTO result = courseService.getCourseStats(-1);
+        List<CourseStatsDTO> result = courseService.getCourseStats(teacherId);
         return ResponseEntity.ok(result);
     }
 

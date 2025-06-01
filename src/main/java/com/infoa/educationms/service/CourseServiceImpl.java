@@ -18,7 +18,7 @@ public class CourseServiceImpl implements CourseService {
     private PersonalInfoRepository personalInfoRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
+    private TakeRepository takeRepository;
 
     @Autowired
     private SectionRepository sectionRepository;
@@ -30,7 +30,7 @@ public class CourseServiceImpl implements CourseService {
     private GradeRepository gradeRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private StudentRepository studentRepository;
 
     private int getCurrentUserId() {
         return getCurrentUser().getUserId();
@@ -123,50 +123,47 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public CourseStatsDTO getCourseStats(int sectionId) {
-    /*    if (!isTeacher()) {
-            throw new SecurityException("仅教师可查看课程统计信息");
-        }*/
-        List<Section> section = sectionRepository.findBySectionId(sectionId);
-        if (section.isEmpty() || section.get(0).getTeacherId() != getCurrentUserId()) {
-            throw new SecurityException("无权查看该课程");
-        }
+    public List<CourseStatsDTO> getCourseStats(Integer teacherId) {
 
         // 假设通过 section 获取对应的 Course 信息
-        Course course = courseRepository.findById(section.get(0).getCourseId()).orElse(null);
-        if (course == null) {
-            throw new IllegalStateException("课程不存在");
+        List<Section> sections = sectionRepository.findByTeacherId(teacherId);
+        List<CourseStatsDTO> dtos = new ArrayList<>();
+        for (Section section : sections) {
+            Course course = courseRepository.findOneByCourseId(section.getCourseId());
+            List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
+            List<Integer> scores = new ArrayList<>();
+            List<Double> point = new ArrayList<>();
+            for (Take take : takes) {
+                List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
+                double sum = 0;
+                for (Grade grade : grades) {
+                    sum += grade.getGrade()*grade.getProportion();
+                }
+                Integer i = (int)sum;
+                scores.add(i);
+                point.add(convertGradeToGpa(i));
+            }
+            Integer total = 0;
+            Double totalp = 0.0;
+            for (Integer i : scores) {
+                total += i;
+            }
+            for (Double d : point) {
+                totalp += d;
+            }
+            Double average = (double)total/(double)scores.size();
+            Double gpa = average/totalp;
+            CourseStatsDTO dto = new CourseStatsDTO();
+            dto.setCourseId(course.getCourseId());
+            dto.setCourseName(course.getTitle());
+            dto.setGpa(gpa);
+            dto.setAverage(average);
+            dto.setTeacherId(teacherId);
+            dto.setTotalStudents(takes.size());
+            dto.setScores(scores);
+            dtos.add(dto);
         }
-
-        List<Grade> grades = gradeRepository.findBySectionId(sectionId);
-        int totalStudents = grades.size();
-
-        // 计算平均分
-        double average = grades.stream()
-                .mapToInt(Grade::getGrade)
-                .average()
-                .orElse(0);
-
-        // 这里假设你有方法计算 GPA，比如 convertGradeToGpa
-        double gpa = grades.stream()
-                .mapToDouble(g -> convertGradeToGpa(g.getGrade()))
-                .average()
-                .orElse(0);
-
-        // 收集所有成绩
-        List<Integer> scores = grades.stream()
-                .map(Grade::getGrade)
-                .toList();
-
-        CourseStatsDTO dto = new CourseStatsDTO();
-        dto.setCourseId(course.getCourseId());
-        dto.setCourseName(course.getTitle());
-        dto.setAverage(average);
-        dto.setGpa(gpa);
-        dto.setTotalStudents(totalStudents);
-        dto.setScores(scores);
-
-        return dto;
+        return dtos;
     }
 
     @Override

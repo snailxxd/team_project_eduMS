@@ -17,7 +17,7 @@ public class GradeChange {
     @Column(name = "teacher_id")
     private int teacherId;
 
-    private boolean result;
+    private Boolean result;
 
     @Column(name = "new_grade")
     private int newGrade;
@@ -37,7 +37,7 @@ public class GradeChange {
     // constructors
     public GradeChange() {}
 
-    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId, String reason) {
+    public GradeChange(int changeId, int takeId, int teacherId, Boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId, String reason) {
         this.changeId = changeId;
         this.takeId = takeId;
         this.teacherId = teacherId;
@@ -89,11 +89,11 @@ public class GradeChange {
         this.teacherId = teacherId;
     }
 
-    public boolean getResult() {
+    public Boolean getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(Boolean result) {
         this.result = result;
     }
 

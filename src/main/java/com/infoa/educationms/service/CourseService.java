@@ -19,7 +19,7 @@ public interface CourseService {
     void deleteCourse(int courseId);
 
     // 获取课程统计，参数为sectionId或课程ID，业务自行调整
-    CourseStatsDTO getCourseStats(int sectionId);
+    List<CourseStatsDTO> getCourseStats(Integer teacherId);
 
     // 获取某课程学生排名
     List<StudentRankDTO> getCourseStudentRanks(int sectionId);

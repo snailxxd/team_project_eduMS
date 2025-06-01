@@ -100,7 +100,7 @@ public class GradeServiceImpl implements GradeService {
 
     public List<GradeStatusDTO> getAllStudentGradesBySection(Integer teacherId){
         List<Section> sections = sectionRepository.findByTeacherId(teacherId);
-        List<GradeStatusDTO> gradestaetusDTOs = new ArrayList<>();
+        List<GradeStatusDTO> gradestatusDTOs = new ArrayList<>();
         for (Section section : sections) {
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
@@ -115,17 +115,25 @@ public class GradeServiceImpl implements GradeService {
                     gradestatusDTO.setStatus("已确认");
                     sum += grade.getProportion()*grade.getGrade();
 
-                    if(gradeChangeRepository.findByGradeId(grade.getGradeId()).isEmpty()){
+                    if(!gradeChangeRepository.findByGradeId(grade.getGradeId()).isEmpty()){
                         gradestatusDTO.setStatus("待审核");
-                    }
-                    else {
-                        if(!gradeChangeRepository.findResultByGradeId(grade.getGradeId()).isEmpty()){
-                            List<Boolean> results = gradeChangeRepository.findResultByGradeId(grade.getGradeId());
-                            if(results.get(0) == true){
-                                gradestatusDTO.setStatus("已修改");
-                            }
-                            else{
-                                gradestatusDTO.setStatus("已拒绝");
+                        List<Boolean> results = gradeChangeRepository.findResultByGradeId(grade.getGradeId());
+                        boolean Isnull = false;
+                        for (Boolean result : results) {
+                            if(result == null){Isnull = true;}
+                        }
+                        if(Isnull){
+                        }
+                        else {
+                            if(!results.isEmpty()){
+
+
+                                if(results.get(0) == true){
+                                    gradestatusDTO.setStatus("已修改");
+                                }
+                                else{
+                                    gradestatusDTO.setStatus("已拒绝");
+                                }
                             }
                         }
                     }
@@ -137,11 +145,11 @@ public class GradeServiceImpl implements GradeService {
                     gradestatusDTO.setStudentName(personalInfo.getName());
                     gradestatusDTO.setCourseId(section.getCourseId());
                     gradestatusDTO.setCourseName(course.getTitle());
-                    gradestaetusDTOs.add(gradestatusDTO);
+                    gradestatusDTOs.add(gradestatusDTO);
                 }
             }
         }
-        return gradestaetusDTOs;
+        return gradestatusDTOs;
     }
 }
 

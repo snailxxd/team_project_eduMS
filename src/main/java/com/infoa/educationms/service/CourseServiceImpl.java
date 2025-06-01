@@ -109,20 +109,15 @@ public class CourseServiceImpl implements CourseService {
         course.setGradeYear(dto.getGradeYear());
         courseRepository.save(course);
 
-        // 更新对应 Section（这里假设只有一个 Section）
-        Section section = sectionRepository.findFirstByCourseId(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("找不到对应开课区段"));
+        List<Section> sections = sectionRepository.findAllByCourseId(courseId);
 
-        if (section.getTeacherId() != getCurrentUserId()) {
-            throw new SecurityException("无权修改他人课程信息");
+        for (Section section : sections) {
+            section.setYear(dto.getGradeYear());
+            section.setSemester(dto.getPeriod().toString());
         }
 
-        section.setYear(dto.getGradeYear());
-        section.setSemester(""); // 根据 dto 补充
-        // 其它 Section 字段根据 dto 补充
-        sectionRepository.save(section);
+        sectionRepository.saveAll(sections);
 
-        // 返回更新后的 CourseDTO
         return toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
     }
 

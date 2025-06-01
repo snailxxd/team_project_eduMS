@@ -4,6 +4,7 @@ import com.infoa.educationms.entities.Section;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,7 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
      * @param courseId 课程ID
      * @return 符合条件的section（Optional包装）
      */
-     Optional<Section> findFirstByCourseId(Integer courseId);
+    Optional<Section> findFirstByCourseId(Integer courseId);
+
+    Arrays findByCourseIdIn(List<Integer> courseIds);
 }

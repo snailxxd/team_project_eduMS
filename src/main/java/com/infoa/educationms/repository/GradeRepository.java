@@ -15,6 +15,8 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
     // 基本方法
     Optional<Grade> findByTakeIdAndGradeType(int takeId, String gradeType);
 
+    Grade findOneByGradeId(int gradeId);
+
     // 查询某个takeId的所有成绩
     List<Grade> findByTakeId(int takeId);
 

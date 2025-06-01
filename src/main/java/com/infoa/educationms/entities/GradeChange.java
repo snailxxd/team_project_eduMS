@@ -31,10 +31,13 @@ public class GradeChange {
     @Column(name = "grade_id")
     private int gradeId;
 
+    @Column(name = "reason")
+    private String reason;
+
     // constructors
     public GradeChange() {}
 
-    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId) {
+    public GradeChange(int changeId, int takeId, int teacherId, boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId, String reason) {
         this.changeId = changeId;
         this.takeId = takeId;
         this.teacherId = teacherId;
@@ -43,6 +46,7 @@ public class GradeChange {
         this.applyTime = applyTime;
         this.checkTime = checkTime;
         this.gradeId = gradeId;
+        this.reason = reason;
     }
 
     // 转换为字符串
@@ -56,6 +60,7 @@ public class GradeChange {
                 ", applyTime=" + applyTime +
                 ", checkTime=" + checkTime +
                 ", gradeId=" + gradeId +
+                ", reason=" + reason +
                 '}';
     }
 
@@ -123,4 +128,13 @@ public class GradeChange {
     public void setGradeId(int gradeId) {
         this.gradeId = gradeId;
     }
+
+    public String getReason() {
+        return reason;
+    }
+    
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
 }

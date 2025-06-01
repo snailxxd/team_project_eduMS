@@ -1,7 +1,6 @@
 package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.PersonalInfoDTO;
-import com.infoa.educationms.repository.PersonalInfoRepository;
 import com.infoa.educationms.service.PersonalInforServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

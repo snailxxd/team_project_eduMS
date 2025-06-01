@@ -40,6 +40,9 @@ public class EducationMSServiceImp implements EducationMSService {
     @Autowired
     private TakeRepository takeRepository;
 
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
     //-------------------------- 通用模块接口实现 -------------------------------//
     @Override
     public ApiResult getPersonalInfo(int userId) {
@@ -230,6 +233,15 @@ public class EducationMSServiceImp implements EducationMSService {
         allTeachersAndStudents.addAll(students);
         
         return new ApiResult(true, "获取全体师生成功", new UserList(allTeachersAndStudents));
+    }
+
+    @Override
+    public ApiResult queryDepartment() {
+        List<Department> departments = departmentRepository.findAll();
+        if (departments.isEmpty()) {
+            return new ApiResult(false, "未找到部门信息");
+        }
+        return new ApiResult(true, "查询成功", departments);
     }
 
     //---------------------------- 教师模块接口实现 -----------------------------//

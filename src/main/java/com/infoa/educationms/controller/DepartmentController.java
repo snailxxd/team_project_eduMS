@@ -17,7 +17,7 @@ public class DepartmentController {
 
     @GetMapping("/departments")
     public ResponseEntity<ApiResult> getAllDepartments() {
-        ApiResult result = educationMSService.queryDepartments(); // 你需要先在接口里定义这个方法
+        ApiResult result = educationMSService.queryDepartment();
         return ResponseEntity.ok(result);
     }
 }

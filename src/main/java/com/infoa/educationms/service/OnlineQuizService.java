@@ -1,8 +1,9 @@
 package com.infoa.educationms.service;
 
+import com.infoa.educationms.DTO.OqCourseForStudentDTO;
+import com.infoa.educationms.DTO.OqCourseForTeacherDTO;
+import com.infoa.educationms.DTO.OqStudentDTO;
 import com.infoa.educationms.entities.Course;
-import com.infoa.educationms.entities.Student;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,21 +13,21 @@ public interface OnlineQuizService {
      * @param teacherId 教师ID
      * @return 课程列表
      */
-    List<Course> getCoursesByTeacher(Integer teacherId);
+    List<OqCourseForTeacherDTO> getCoursesByTeacher(Integer teacherId);
 
     /**
      * 查询课程所有学生
      * @param courseId 课程ID
      * @return 学生列表
      */
-    List<Student> getStudentsByCourse(Integer courseId);
+    List<OqStudentDTO> getStudentsByCourse(Integer courseId);
 
     /**
      * 查询学生所有参加的课程
      * @param studentId 学生ID
      * @return 课程列表
      */
-    List<Course> getCoursesByStudent(Integer studentId);
+    List<OqCourseForStudentDTO> getCoursesByStudent(Integer studentId);
 
     /**
      * 设置考试成绩占比

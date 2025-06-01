@@ -1,13 +1,14 @@
 package com.infoa.educationms.service;
 
+import com.infoa.educationms.DTO.OqCourseForStudentDTO;
+import com.infoa.educationms.DTO.OqCourseForTeacherDTO;
+import com.infoa.educationms.DTO.OqStudentDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,63 +29,78 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
     @Autowired
     private TakeRepository takeRepository;
 
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private PersonalInfoRepository personalInfoRepository;
 
     @Override
-    public List<Course> getCoursesByTeacher(Integer teacherId) {
-        // 1. 查询教师教授的所有section
-        List<Section> sections = sectionRepository.findByTeacherId(teacherId);
+    public List<OqCourseForTeacherDTO> getCoursesByTeacher(Integer teacherId) {
+        // 验证教师存在
+        teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher is not found: " + teacherId));
 
-        // 2. 提取不重复的courseId列表
-        List<Integer> courseIds = sections.stream()
-                .map(Section::getCourseId)
-                .distinct()
-                .collect(Collectors.toList());
+        List<Course> courses = courseRepository.findByTeacherId(teacherId);
 
-        // 3. 查询课程基本信息
-        return courseRepository.findAllById(courseIds).stream()
-                .map(course -> {
-                    Course simplified = new Course();
-                    simplified.setCourseId(course.getCourseId());
-                    simplified.setTitle(course.getTitle());
-                    simplified.setCredits(course.getCredits());
-                    return simplified;
-                })
+        return courses.stream()
+                .map(c -> new OqCourseForTeacherDTO(
+                        c.getCourseId(),
+                        c.getTitle(),
+                        c.getCredits()
+                ))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Student> getStudentsByCourse(Integer courseId) {
-        // 1. 查询课程的所有section
-        List<Section> sections = sectionRepository.findByCourseId(courseId);
-        if (sections.isEmpty()) {
-            return Collections.emptyList();
-        }
 
-        // 2. 获取sectionId列表
-        List<Integer> sectionIds = sections.stream()
+    @Override
+    public List<OqStudentDTO> getStudentsByCourse(Integer courseId) {
+        // 1. 验证课程存在
+        courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course is not found: " + courseId));
+
+        // 2. 获取课程的所有section ID
+        List<Integer> sectionIds = sectionRepository.findByCourseId(courseId).stream()
                 .map(Section::getSectionId)
                 .collect(Collectors.toList());
 
-        // 3. 查询选修这些section的学生ID
-        List<Integer> studentIds = takeRepository.findBySectionIdIn(sectionIds).stream()
+        // 3. 获取选课学生ID
+        Set<Integer> studentIds = takeRepository.findBySectionIdIn(sectionIds).stream()
                 .map(Take::getStudentId)
-                .distinct()
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        // 4. 查询学生详细信息
-        return studentRepository.findAllById(studentIds).stream()
-                .map(student -> {
-                    Student simplified = new Student();
-                    simplified.setUserId(student.getUserId());
-                    simplified.setPersonalInfoId(student.getPersonalInfoId());
-                    simplified.setDeptName(student.getDeptName());
-                    return simplified;
-                })
+        List<Student> students = studentRepository.findAllById(studentIds);
+
+        // 4. 批量获取关联的PersonalInfo
+        Map<Integer, PersonalInfo> personalInfoMap = personalInfoRepository.findAllById(
+                        students.stream()
+                                .map(Student::getPersonalInfoId)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList())
+                ).stream()
+                .collect(Collectors.toMap(PersonalInfo::getPersonalInfoId, p -> p));
+
+        // 5. 转换为DTO
+        return students.stream()
+                .map(student -> convertToOqStudentDTO(student, personalInfoMap))
                 .collect(Collectors.toList());
     }
 
+    private OqStudentDTO convertToOqStudentDTO(Student student, Map<Integer, PersonalInfo> personalInfoMap) {
+        // 获取PersonalInfo
+        PersonalInfo personalInfo = student.getPersonalInfoId() != 0 ?
+                personalInfoMap.get(student.getPersonalInfoId()) : null;
+
+        return new OqStudentDTO(
+                student.getUserId(),
+                personalInfo != null ? personalInfo.getName() : "未知学生", // 从PersonalInfo获取姓名
+                student.getDeptName()
+        );
+    }
+
+
     @Override
-    public List<Course> getCoursesByStudent(Integer studentId) {
+    public List<OqCourseForStudentDTO> getCoursesByStudent(Integer studentId) {
         // 1. 查询学生的所有选课记录
         List<Take> takes = takeRepository.findByStudentId(studentId);
         if (takes.isEmpty()) {
@@ -96,26 +112,35 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
                 .map(Take::getSectionId)
                 .collect(Collectors.toList());
 
-        // 3. 查询这些section对应的课程ID
-        List<Integer> courseIds = sectionRepository.findAllById(sectionIds).stream()
-                .map(Section::getCourseId)
-                .distinct()
-                .collect(Collectors.toList());
+        // 3. 查询这些section对应的课程ID和教师信息
+        Map<Integer, Integer> courseTeacherMap = sectionRepository.findAllById(sectionIds).stream()
+                .collect(Collectors.toMap(
+                        Section::getCourseId,
+                        Section::getTeacherId,
+                        (existing, replacement) -> existing // 如果有重复的courseId，保留现有的
+                ));
 
-        // 4. 查询课程详细信息
-        return courseRepository.findAllById(courseIds).stream()
+        // 4. 查询课程详细信息并转换为DTO
+        return courseRepository.findAllById(courseTeacherMap.keySet()).stream()
                 .map(course -> {
-                    Course simplified = new Course();
-                    simplified.setCourseId(course.getCourseId());
-                    simplified.setTitle(course.getTitle());
-                    simplified.setCredits(course.getCredits());
+                    // 获取教师信息
+                    Integer teacherId = courseTeacherMap.get(course.getCourseId());
+                    String teacherName = "";
+                    // 可以进一步查询教师详细信息，例如姓名
+                     Optional<Teacher> teacher = teacherRepository.findById(teacherId);
+                     if (teacher.isPresent()) {
+                         Optional<PersonalInfo> personalInfo = personalInfoRepository.findById(teacher.get().getPersonalInfoId());
+                         if (personalInfo.isPresent()) {
+                             teacherName = personalInfo.get().getName();
+                         }
+                     }
 
-                    // 获取授课教师信息（取第一个section的教师）
-                    Optional<Section> firstSection = sectionRepository.findFirstByCourseId(course.getCourseId());
-                    firstSection.ifPresent(section ->
-                            simplified.setDeptName("教师ID: " + section.getTeacherId()));
-
-                    return simplified;
+                    return new OqCourseForStudentDTO(
+                            course.getCourseId(),
+                            course.getTitle(),
+                            course.getCredits(),
+                            teacherName
+                    );
                 })
                 .collect(Collectors.toList());
     }

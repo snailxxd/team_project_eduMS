@@ -1,9 +1,9 @@
 package com.infoa.educationms.service;
 
-import com.infoa.educationms.DTO.ClassroomDTO;
-import com.infoa.educationms.DTO.ClassroomUpdateDTO;
-import com.infoa.educationms.DTO.CourseDTO;
-import com.infoa.educationms.DTO.TeacherDTO;
+import com.infoa.educationms.DTO.CaClassroomDTO;
+import com.infoa.educationms.DTO.CaClassroomUpdateDTO;
+import com.infoa.educationms.DTO.CaCourseDTO;
+import com.infoa.educationms.DTO.CaTeacherDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
     private PersonalInfoRepository personalInfoRepository;
 
     @Override
-    public List<CourseDTO> getAllCourses() {
+    public List<CaCourseDTO> getAllCourses() {
         // 1. 获取所有课程
         List<Course> courses = courseRepository.findAll();
 
@@ -41,7 +41,7 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
                 .collect(Collectors.toList());
     }
 
-    private CourseDTO convertToDTO(Course course){
+    private CaCourseDTO convertToDTO(Course course){
         // 3. 获取课程的第一个section
         Optional<Section> firstSection = sectionRepository.findFirstByCourseId(course.getCourseId());
         // 4. 初始化教师和教室信息
@@ -60,8 +60,8 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
                     .orElse(null);
         }
         // 6. 构建DTO
-        return new CourseDTO(
-                String.valueOf(course.getCourseId()),
+        return new CaCourseDTO(
+                course.getCourseId(),
                 course.getTitle(),
                 course.getCredits(),
                 teacherName,
@@ -70,14 +70,14 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
     }
 
     @Override
-    public List<ClassroomDTO> getAllClassrooms() {
+    public List<CaClassroomDTO> getAllClassrooms() {
         return classroomRepository.findAll().stream()
                 .map(this::convertToClassroomDTO)
                 .collect(Collectors.toList());
     }
 
-    private ClassroomDTO convertToClassroomDTO(Classroom classroom) {
-        return new ClassroomDTO(
+    private CaClassroomDTO convertToClassroomDTO(Classroom classroom) {
+        return new CaClassroomDTO(
                 classroom.getClassroomId(),
                 classroom.getCapacity(),
                 classroom.getBuilding()
@@ -85,7 +85,7 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
     }
 
     @Override
-    public List<TeacherDTO> getAllTeachers() {
+    public List<CaTeacherDTO> getAllTeachers() {
         // 1. 获取所有教师
         List<Teacher> teachers = teacherRepository.findAll();
 
@@ -104,12 +104,12 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
                 .collect(Collectors.toList());
     }
 
-    private TeacherDTO convertToTeacherDTO(Teacher teacher, Map<Integer, PersonalInfo> personalInfoMap) {
+    private CaTeacherDTO convertToTeacherDTO(Teacher teacher, Map<Integer, PersonalInfo> personalInfoMap) {
         // 获取PersonalInfo
         PersonalInfo personalInfo = teacher.getPersonalInfoId() != 0 ?
                 personalInfoMap.get(teacher.getPersonalInfoId()) : null;
 
-        return new TeacherDTO(
+        return new CaTeacherDTO(
                 teacher.getUserId(),
                 personalInfo != null ? personalInfo.getName() : "未知教师", // 从PersonalInfo获取姓名
                 teacher.getDeptName()
@@ -117,22 +117,22 @@ public class CourseArrangementServiceImpl implements CourseArrangementService {
     }
 
     @Override
-    public void addClassroom(ClassroomDTO classroomDTO) {
+    public void addClassroom(CaClassroomDTO caClassroomDTO) {
         // 将DTO转换为实体
-        Classroom classroom = convertToEntity(classroomDTO);
+        Classroom classroom = convertToEntity(caClassroomDTO);
         classroomRepository.save(classroom);
     }
 
-    private Classroom convertToEntity(ClassroomDTO classroomDTO) {
+    private Classroom convertToEntity(CaClassroomDTO caClassroomDTO) {
         Classroom classroom = new Classroom();
-        classroom.setClassroomId(classroomDTO.getClassroomId());
-        classroom.setCapacity(classroomDTO.getCapacity());
-        classroom.setBuilding(classroomDTO.getBuilding());
+        classroom.setClassroomId(caClassroomDTO.getClassroomId());
+        classroom.setCapacity(caClassroomDTO.getCapacity());
+        classroom.setBuilding(caClassroomDTO.getBuilding());
         return classroom;
     }
 
     @Override
-    public void updateClassroom(Integer classroomId, ClassroomUpdateDTO classroom) {
+    public void updateClassroom(Integer classroomId, CaClassroomUpdateDTO classroom) {
         Classroom existing = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("Classroom not found with id: " + classroomId));
 

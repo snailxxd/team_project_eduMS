@@ -1,12 +1,9 @@
 package com.infoa.educationms.controller;
 
-import com.infoa.educationms.DTO.ClassroomDTO;
-import com.infoa.educationms.DTO.ClassroomUpdateDTO;
-import com.infoa.educationms.DTO.CourseDTO;
-import com.infoa.educationms.DTO.TeacherDTO;
-import com.infoa.educationms.entities.Classroom;
-import com.infoa.educationms.entities.Course;
-import com.infoa.educationms.entities.Teacher;
+import com.infoa.educationms.DTO.CaClassroomDTO;
+import com.infoa.educationms.DTO.CaClassroomUpdateDTO;
+import com.infoa.educationms.DTO.CaCourseDTO;
+import com.infoa.educationms.DTO.CaTeacherDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,27 +26,27 @@ public class CourseArrangementController {
 
     // 查询所有课程信息
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+    public ResponseEntity<List<CaCourseDTO>> getAllCourses() {
         return ResponseEntity.ok(service.getAllCourses());
     }
 
     // 查询所有教室信息
     @GetMapping("/classrooms")
-    public ResponseEntity<List<ClassroomDTO>> getAllClassrooms() {
-        List<ClassroomDTO> classrooms = service.getAllClassrooms();
+    public ResponseEntity<List<CaClassroomDTO>> getAllClassrooms() {
+        List<CaClassroomDTO> classrooms = service.getAllClassrooms();
         return ResponseEntity.ok(classrooms);
     }
 
     // 查询所有老师信息
     @GetMapping("/teachers")
-    public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
-        List<TeacherDTO> teachers = service.getAllTeachers();
+    public ResponseEntity<List<CaTeacherDTO>> getAllTeachers() {
+        List<CaTeacherDTO> teachers = service.getAllTeachers();
         return ResponseEntity.ok(teachers);
     }
 
     // 添加教室
     @PostMapping("/classrooms")
-    public ResponseEntity<Void> addClassroom(@RequestBody ClassroomDTO classroom) {
+    public ResponseEntity<Void> addClassroom(@RequestBody CaClassroomDTO classroom) {
         service.addClassroom(classroom);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -58,7 +55,7 @@ public class CourseArrangementController {
     @PutMapping("/classrooms/{classroomId}")
     public ResponseEntity<Void> updateClassroom(
             @PathVariable Integer classroomId,
-            @RequestBody ClassroomUpdateDTO classroom) {
+            @RequestBody CaClassroomUpdateDTO classroom) {
         service.updateClassroom(classroomId, classroom);
         return ResponseEntity.ok().build();
     }

@@ -1,7 +1,9 @@
 package com.infoa.educationms.controller;
 
+import com.infoa.educationms.DTO.OqCourseForStudentDTO;
+import com.infoa.educationms.DTO.OqCourseForTeacherDTO;
+import com.infoa.educationms.DTO.OqStudentDTO;
 import com.infoa.educationms.entities.Course;
-import com.infoa.educationms.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,28 +19,26 @@ public class OnlineQuizController {
     private final OnlineQuizService service;
 
     @Autowired
-    public OnlineQuizController(OnlineQuizService service) {
-        this.service = service;
-    }
+    public OnlineQuizController(OnlineQuizService service) {this.service = service;}
 
     // 查询老师教授课程
     @GetMapping("/teachers/{teacherId}/courses")
-    public ResponseEntity<List<Course>> getCoursesByTeacher(@PathVariable Integer teacherId) {
-        List<Course> courses = service.getCoursesByTeacher(teacherId);
+    public ResponseEntity<List<OqCourseForTeacherDTO>> getCoursesByTeacher(@PathVariable Integer teacherId) {
+        List<OqCourseForTeacherDTO> courses = service.getCoursesByTeacher(teacherId);
         return ResponseEntity.ok(courses);
     }
 
     // 查询课程所有学生
     @GetMapping("/courses/{courseId}/students")
-    public ResponseEntity<List<Student>> getStudentsByCourse(@PathVariable Integer courseId) {
-        List<Student> students = service.getStudentsByCourse(courseId);
+    public ResponseEntity<List<OqStudentDTO>> getStudentsByCourse(@PathVariable Integer courseId) {
+        List<OqStudentDTO> students = service.getStudentsByCourse(courseId);
         return ResponseEntity.ok(students);
     }
 
     // 查询学生所有参加的课程
     @GetMapping("/students/{studentId}/courses")
-    public ResponseEntity<List<Course>> getCoursesByStudent(@PathVariable Integer studentId) {
-        List<Course> courses = service.getCoursesByStudent(studentId);
+    public ResponseEntity<List<OqCourseForStudentDTO>> getCoursesByStudent(@PathVariable Integer studentId) {
+        List<OqCourseForStudentDTO> courses = service.getCoursesByStudent(studentId);
         return ResponseEntity.ok(courses);
     }
 

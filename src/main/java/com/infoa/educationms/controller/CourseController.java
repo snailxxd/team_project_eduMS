@@ -3,8 +3,6 @@ package com.infoa.educationms.controller;
 import com.infoa.educationms.DTO.CourseDTO;
 import com.infoa.educationms.DTO.CourseStatsDTO;
 import com.infoa.educationms.DTO.StudentRankDTO;
-import com.infoa.educationms.entities.Section;
-import com.infoa.educationms.repository.SectionRepository;
 import com.infoa.educationms.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,57 +11,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/courses")  // 建议把所有课程相关接口都放这里，方便管理
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
-    @Autowired
-    private SectionRepository sectionRepository;
-
-    @GetMapping("/courses")
+    @GetMapping
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
         List<CourseDTO> result = courseService.getAllCourses();
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/courses")
+    @PostMapping
     public ResponseEntity<CourseDTO> createCourse(@RequestBody CourseDTO dto) {
-        Section section = convertToSection(dto);
-        CourseDTO result = courseService.addCourse(section);
+        CourseDTO result = courseService.addCourse(dto);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/courses/{courseId}")
+    @PutMapping("/{courseId}")
     public ResponseEntity<CourseDTO> updateCourse(@PathVariable int courseId, @RequestBody CourseDTO dto) {
-        Section section = convertToSection(dto);
-        section.setSectionId(courseId); // 设置ID
-        CourseDTO result = courseService.updateCourse(section);
+        dto.setCourseId(courseId);  // 确保ID一致
+        CourseDTO result = courseService.updateCourse(courseId, dto);
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/courses/{courseId}")
+    @DeleteMapping("/{courseId}")
     public ResponseEntity<Void> deleteCourse(@PathVariable int courseId) {
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/courses/stats")
+    @GetMapping("/stats")
     public ResponseEntity<CourseStatsDTO> getCourseStats() {
-        // 默认用 sectionId = -1，服务层可以返回全部或需扩展接口
+        // 这里传入-1代表全局统计，您可以根据需要调整
         CourseStatsDTO result = courseService.getCourseStats(-1);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/courses/{courseId}/student-ranks")
-    public ResponseEntity<List<StudentRankDTO>> getCourseStudentRanks(@PathVariable Integer courseId) {
+    @GetMapping("/{courseId}/student-ranks")
+    public ResponseEntity<List<StudentRankDTO>> getCourseStudentRanks(@PathVariable int courseId) {
         List<StudentRankDTO> result = courseService.getCourseStudentRanks(courseId);
         return ResponseEntity.ok(result);
-    }
-
-    private Section convertToSection(CourseDTO dto) {
-        return sectionRepository.findFirstByCourseId(dto.getCourseId())
-                .orElseThrow(() -> new RuntimeException("无法找到课程ID为 " + dto.getCourseId() + " 的课程"));
     }
 }

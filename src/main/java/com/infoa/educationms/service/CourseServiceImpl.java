@@ -84,79 +84,92 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public CourseDTO addCourse(Section section) {
+    public CourseDTO addCourse(CourseDTO dto) {
         if (!isTeacher()) {
-            throw new SecurityException("仅教师可添加开课信息");
+            throw new SecurityException("仅教师可添加课程");
         }
 
+        // 先创建或更新 Course 实体
+        Course course = new Course();
+        course.setTitle(dto.getTitle());
+        course.setDeptName(dto.getDeptName());
+        course.setCredits(dto.getCredits());
+        course.setIntroduction(dto.getCourseIntroduction());
+        course.setCapacity(dto.getCapacity());
+
+        course = courseRepository.save(course);
+
+        // 创建 Section，表示该课程的一个开课区段
+        Section section = new Section();
+        section.setCourseId(course.getCourseId());
         section.setTeacherId(getCurrentUserId());
-        Section savedSection = sectionRepository.save(section);
+        section.setYear(dto.getGradeYear());
+        section.setSemester("");  // 这里示例设置，实际根据 dto 补充
+        section.setClassroomId(0); // 需要从 dto 或前端补充
+        // 其它 Section 字段根据 dto 补充
 
-        Optional<Course> courseOpt = courseRepository.findById(savedSection.getCourseId());
-        if (courseOpt.isEmpty()) {
-            throw new IllegalArgumentException("无法找到对应课程ID: " + savedSection.getCourseId());
-        }
+        section = sectionRepository.save(section);
 
-        Course course = courseOpt.get();
-
-        CourseDTO dto = new CourseDTO();
-        dto.setCourseId(course.getCourseId());
-        dto.setTitle(course.getTitle());
-        dto.setDeptName(course.getDeptName());
-        dto.setCredits(course.getCredits());
-        dto.setCourseIntroduction(course.getIntroduction());
-        dto.setCapacity(course.getCapacity());
-
-        dto.setRequiredRoomType("Unknown"); // 可按需设置
-        dto.setGradeYear(savedSection.getYear());
-        dto.setPeriod(1); // 可从 timeSlotId 中解析
-
-        return dto;
+        return toCourseDTO(section, course);
     }
 
 
     @Override
-    public CourseDTO updateCourse(Section section) {
+    public CourseDTO updateCourse(int courseId, CourseDTO dto) {
         if (!isTeacher()) {
-            throw new SecurityException("仅教师可修改开课信息");
+            throw new SecurityException("仅教师可修改课程");
         }
 
-        Section existing = sectionRepository.findById(section.getSectionId()).orElse(null);
-        if (existing == null || existing.getTeacherId() != getCurrentUserId()) {
+        // 更新 Course
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("找不到课程ID: " + courseId));
+
+        course.setTitle(dto.getTitle());
+        course.setDeptName(dto.getDeptName());
+        course.setCredits(dto.getCredits());
+        course.setIntroduction(dto.getCourseIntroduction());
+        course.setCapacity(dto.getCapacity());
+        courseRepository.save(course);
+
+        // 更新对应 Section（这里假设只有一个 Section）
+        Section section = sectionRepository.findFirstByCourseId(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("找不到对应开课区段"));
+
+        if (section.getTeacherId() != getCurrentUserId()) {
             throw new SecurityException("无权修改他人课程信息");
         }
 
-        existing.setSemester(section.getSemester());
-        existing.setYear(section.getYear());
-        existing.setClassroomId(section.getClassroomId());
-        existing.setTimeSlotIdList(section.getTimeSlotIdList());  // 如果需要更新
-        existing.setTeacherId(section.getTeacherId());    // 如果允许更新教师ID
+        section.setYear(dto.getGradeYear());
+        section.setSemester(""); // 根据 dto 补充
+        // 其它 Section 字段根据 dto 补充
+        sectionRepository.save(section);
 
-        sectionRepository.save(existing);
-
-        Course course = courseRepository.findById(existing.getCourseId())
-                .orElseThrow(() -> new IllegalArgumentException("找不到对应课程"));
-
-        return toCourseDTO(existing, course);
+        return toCourseDTO(section, course);
     }
 
 
     @Override
     public void deleteCourse(int courseId) {
         if (!isTeacher()) {
-            throw new SecurityException("仅教师可删除开课信息");
-        }
-        // 找到对应的 Section
-        Section section = sectionRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("找不到对应的课程信息"));
-
-        // 判断是否为当前教师
-        if (section.getTeacherId() != getCurrentUserId()) {
-            throw new SecurityException("无权删除他人课程信息");
+            throw new SecurityException("仅教师可删除课程");
         }
 
-        sectionRepository.deleteById(courseId);
+        // 删除课程对应的所有 Section
+        List<Section> sections = sectionRepository.findByCourseId(courseId);
+
+        for (Section section : sections) {
+            if (section.getTeacherId() != getCurrentUserId()) {
+                throw new SecurityException("无权删除他人课程信息");
+            }
+        }
+
+        // 先删除所有开课区段
+        sectionRepository.deleteAll(sections);
+
+        // 再删除课程实体
+        courseRepository.deleteById(courseId);
     }
+
 
     @Override
     public CourseStatsDTO getCourseStats(int sectionId) {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,8 +67,7 @@ public class UserServiceImpl implements UserService {
             personalInfor = new PersonalInfor();
         }
 
-        // 设置个人信息字段（这里假设至少要设置姓名，其他可按需设置）
-        personalInfor.setName(userDTO.getName() != null ? userDTO.getName() : "默认姓名");
+        personalInfor.setName(userDTO.getName());
         personalInfor.setPhoneNumber(userDTO.getPhoneNumber());
         personalInfor.setPicture(userDTO.getPicture());
 
@@ -97,7 +97,6 @@ public class UserServiceImpl implements UserService {
 
         // 赋值公共字段
         userEntity.setAccountNumber(userDTO.getAccountNumber());
-        // 这里密码没带，创建时可以默认或者前端传入再传DTO里
         userEntity.setPassword("default_password");
         userEntity.setPersonalInfoId(personalInfor.getPersonalInfoId());
         userEntity.setUserType(UserRole.valueOf(type.toUpperCase()));
@@ -107,6 +106,13 @@ public class UserServiceImpl implements UserService {
 
         // 转换成 DTO 返回
         return toUserDTO(userEntity);
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new NoSuchElementException("User不存在"));
+        userRepository.delete(user);
     }
 
 
@@ -146,6 +152,7 @@ public class UserServiceImpl implements UserService {
         student.setDeptName(studentDTO.getDeptName());
         student.setTotalCredit(studentDTO.getTotCred() == null ? 0 : studentDTO.getTotCred());
         student = studentRepository.save(student);
+
         return toStudentDTO(student, pi);
     }
 

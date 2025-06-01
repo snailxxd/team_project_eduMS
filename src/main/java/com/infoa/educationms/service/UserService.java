@@ -12,6 +12,8 @@ public interface UserService {
 
     UserDTO addUser(UserDTO userDTO);
 
+    void deleteUser(int userId);
+
 
     // 学生管理
     List<StudentDTO> getAllStudents();

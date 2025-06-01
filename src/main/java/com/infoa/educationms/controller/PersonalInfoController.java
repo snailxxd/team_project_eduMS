@@ -1,10 +1,7 @@
 package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.PersonalInfoDTO;
-import com.infoa.educationms.entities.PersonalInfor;
-import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.repository.PersonalInfoRepository;
-import com.infoa.educationms.service.EducationMSService;
 import com.infoa.educationms.service.PersonalInforServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +13,6 @@ public class PersonalInfoController {
 
     @Autowired
     private PersonalInforServer personalInforServer;
-    @Autowired
-    private PersonalInfoRepository personalInfoRepository;
 
     @PostMapping("/personal-information")
     public ResponseEntity<PersonalInfoDTO> createPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO) {

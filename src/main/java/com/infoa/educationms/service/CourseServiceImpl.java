@@ -57,18 +57,7 @@ public class CourseServiceImpl implements CourseService {
 
                     Course course = courseOpt.get();
 
-                    CourseDTO dto = new CourseDTO();
-                    dto.setCourseId(course.getCourseId());
-                    dto.setTitle(course.getTitle());
-                    dto.setDeptName(course.getDeptName());
-                    dto.setCredits(course.getCredits());
-                    dto.setCourseIntroduction(course.getIntroduction());
-                    dto.setCapacity(course.getCapacity());
-
-                    // 从 Section 获取剩余字段
-                    dto.setRequiredRoomType("Unknown"); // 假设没有直接字段就占位
-                    dto.setGradeYear(section.getYear());
-                    dto.setPeriod(1); // 待实现
+                    CourseDTO dto = toCourseDTO(course, "Unknown", section.getYear(), 1);
 
                     return dto;
                 })
@@ -96,16 +85,7 @@ public class CourseServiceImpl implements CourseService {
 
         course = courseRepository.save(course);
 
-        CourseDTO dto2 = new CourseDTO();
-        dto2.setCourseId(course.getCourseId());
-        dto2.setTitle(course.getTitle());
-        dto2.setDeptName(course.getDeptName());
-        dto2.setCredits(course.getCredits());
-        dto2.setCourseIntroduction(course.getIntroduction());
-        dto2.setCapacity(course.getCapacity());
-        dto2.setRequiredRoomType(course.getRequiredRoomType());
-        dto2.setGradeYear(course.getGradeYear());
-        dto2.setPeriod(course.getPeriod());
+        CourseDTO dto2 = toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
 
         return dto2;
     }
@@ -126,6 +106,9 @@ public class CourseServiceImpl implements CourseService {
         course.setCredits(dto.getCredits());
         course.setIntroduction(dto.getCourseIntroduction());
         course.setCapacity(dto.getCapacity());
+        course.setRequiredRoomType(dto.getRequiredRoomType());
+        course.setPeriod(dto.getPeriod());
+        course.setGradeYear(dto.getGradeYear());
         courseRepository.save(course);
 
         // 更新对应 Section（这里假设只有一个 Section）
@@ -141,8 +124,13 @@ public class CourseServiceImpl implements CourseService {
         // 其它 Section 字段根据 dto 补充
         sectionRepository.save(section);
 
-        return null;
+        // 返回更新后的 CourseDTO
+        CourseDTO updatedDto = toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
+
+        return updatedDto;
     }
+
+
 
 
     @Override
@@ -266,5 +254,17 @@ public class CourseServiceImpl implements CourseService {
         return 0.0;
     }
 
-
+    private static CourseDTO toCourseDTO(Course course, String course1, int course2, int course3) {
+        CourseDTO updatedDto = new CourseDTO();
+        updatedDto.setCourseId(course.getCourseId());
+        updatedDto.setTitle(course.getTitle());
+        updatedDto.setDeptName(course.getDeptName());
+        updatedDto.setCredits(course.getCredits());
+        updatedDto.setCourseIntroduction(course.getIntroduction());
+        updatedDto.setCapacity(course.getCapacity());
+        updatedDto.setRequiredRoomType(course1);
+        updatedDto.setGradeYear(course2);
+        updatedDto.setPeriod(course3);
+        return updatedDto;
+    }
 }

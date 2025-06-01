@@ -28,16 +28,21 @@ public class Course {
     private int grade_year;
 
     private int period;
-    // constructors
-    public Course() {}
 
-    public Course(int courseId, String title, String deptName, int credits, String introduction, int capacity) {
+    // constructors
+    public Course() {
+    }
+
+    public Course(int courseId, String title, String deptName, int credits, String introduction, int capacity, String required_room_type, int grade_year, int period) {
         this.courseId = courseId;
         this.title = title;
         this.deptName = deptName;
         this.credits = credits;
         this.introduction = introduction;
         this.capacity = capacity;
+        this.required_room_type = required_room_type;
+        this.grade_year = grade_year;
+        this.period = period;
     }
 
     // 转换为字符串
@@ -49,6 +54,9 @@ public class Course {
                 ", credits=" + credits +
                 ", introduction='" + introduction + '\'' +
                 ", capacity=" + capacity +
+                ", required_room_type='" + required_room_type + '\'' +
+                ", grade_year=" + grade_year +
+                ", period=" + period +
                 '}';
     }
 
@@ -99,5 +107,29 @@ public class Course {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public String getRequiredRoomType() {
+        return required_room_type;
+    }
+
+    public void setRequiredRoomType(String required_room_type) {
+        this.required_room_type = required_room_type;
+    }
+
+    public int getGradeYear() {
+        return grade_year;
+    }
+
+    public void setGradeYear(int grade_year) {
+        this.grade_year = grade_year;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
     }
 }

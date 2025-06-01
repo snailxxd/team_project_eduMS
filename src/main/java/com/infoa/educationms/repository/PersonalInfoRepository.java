@@ -1,11 +1,11 @@
 package com.infoa.educationms.repository;
 
-import com.infoa.educationms.entities.PersonalInfo;
+import com.infoa.educationms.entities.PersonalInfor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonalInfoRepository extends JpaRepository<PersonalInfo, Integer> {
+public interface PersonalInfoRepository extends JpaRepository<PersonalInfor, Integer> {
 
-    PersonalInfo findOneByPersonalInfoId(int id);
+    PersonalInfor findOneByPersonalInfoId(int id);
 }

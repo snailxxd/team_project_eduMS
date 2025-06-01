@@ -111,8 +111,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int userId) {
         User user = userRepository.findById(userId)
-                        .orElseThrow(() -> new NoSuchElementException("User不存在"));
+                .orElseThrow(() -> new NoSuchElementException("用户不存在"));
+
+        int personalInfoId = user.getPersonalInfoId();
+
+        // 先删除用户
         userRepository.delete(user);
+
+        // 再删除对应的个人信息
+        personalInfoRepository.deleteById(personalInfoId);
     }
 
 

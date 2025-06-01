@@ -11,21 +11,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class EducationMSController {
+public class EducationMSController_废案 {
 
     private final EducationMSService service;
 
     @Autowired
-    public EducationMSController(EducationMSService service) {
+    public EducationMSController_废案(EducationMSService service) {
         this.service = service;
     }
 
-    // General Module Endpoints
+    //通用模块接口
     
     /**
-     * Query personal information
-     * @param userId User ID
-     * @return Response containing personal info
+     * 查询个人信息
+     * @param userId 用户ID
+     * @return 包含个人信息的响应
      */
     @GetMapping("/users/{userId}/personal-info")
     public ResponseEntity<ApiResult> getPersonalInfo(@PathVariable int userId) {
@@ -34,10 +34,10 @@ public class EducationMSController {
     }
     
     /**
-     * Update personal information
-     * @param userId User ID
-     * @param info Personal information object
-     * @return Response with operation result
+     * 更新个人信息
+     * @param userId 用户ID
+     * @param info 个人信息对象
+     * @return 操作结果
      */
     @PutMapping("/users/{userId}/personal-info")
     public ResponseEntity<ApiResult> updatePersonalInfo(
@@ -48,8 +48,8 @@ public class EducationMSController {
     }
     
     /**
-     * Get all course information
-     * @return Response with list of courses
+     * 查询所有课程信息
+     * @return 包含课程列表的响应
      */
     @GetMapping("/sections")
     public ResponseEntity<ApiResult> getAllSections() {
@@ -57,11 +57,11 @@ public class EducationMSController {
         return ResponseEntity.ok(result);
     }
 
-    // Student Module Endpoints
+    //学生模块接口
     
     /**
-     * Query current student's grades
-     * @return Response with grade details
+     * 查询当前学生成绩
+     * @return 包含成绩详情的响应
      */
     @GetMapping("/students/grades")
     public ResponseEntity<ApiResult> getStudentGrades() {
@@ -70,8 +70,8 @@ public class EducationMSController {
     }
     
     /**
-     * Analyze current student's grades
-     * @return Response with grade analysis result
+     * 分析当前学生成绩
+     * @return 包含成绩分析结果的响应
      */
     @GetMapping("/students/grades/analysis")
     public ResponseEntity<ApiResult> analyzeStudentGrades() {
@@ -79,12 +79,12 @@ public class EducationMSController {
         return ResponseEntity.ok(result);
     }
 
-    // Administrator Module Endpoints
+    //管理员模块接口
     
     /**
-     * Add a new user
-     * @param user User object
-     * @return Response with operation result
+     * 添加新用户
+     * @param user 用户对象
+     * @return 操作结果
      */
     @PostMapping("/admin/users")
     public ResponseEntity<ApiResult> addUser(@RequestBody User user) {
@@ -93,8 +93,8 @@ public class EducationMSController {
     }
     
     /**
-     * Delete an admin user
-     * @return Response with operation result
+     * 删除当前管理员用户
+     * @return 操作结果
      */
     @DeleteMapping("/admin/users")
     public ResponseEntity<ApiResult> deleteAdminUser() {
@@ -103,10 +103,10 @@ public class EducationMSController {
     }
     
     /**
-     * Search for users
-     * @param keyword Search keyword
-     * @param role User role
-     * @return Response with list of users
+     * 搜索用户
+     * @param keyword 搜索关键字
+     * @param role 用户角色
+     * @return 包含用户列表的响应
      */
     @GetMapping("/admin/users/search")
     public ResponseEntity<ApiResult> searchUsers(
@@ -117,8 +117,8 @@ public class EducationMSController {
     }
     
     /**
-     * Update admin user information
-     * @return Response with operation result
+     * 更新管理员信息
+     * @return 操作结果
      */
     @PutMapping("/admin/users")
     public ResponseEntity<ApiResult> updateAdminUser() {
@@ -127,10 +127,10 @@ public class EducationMSController {
     }
     
     /**
-     * Audit grade change request
-     * @param changeId Change request ID
-     * @param isApproved Whether the change is approved
-     * @return Response with operation result
+     * 审核成绩修改申请
+     * @param changeId 修改申请ID
+     * @param isApproved 是否批准
+     * @return 操作结果
      */
     @PostMapping("/admin/grade-changes/{changeId}/audit")
     public ResponseEntity<ApiResult> auditGradeChange(
@@ -141,8 +141,8 @@ public class EducationMSController {
     }
 
     /**
-     * Get all teacher and student user information
-     * @return Response with all teacher and student information
+     * 获取全体师生用户信息
+     * @return 包含全体师生信息的响应
      */
     @GetMapping("/admin/users/all-teachers-students")
     public ResponseEntity<ApiResult> getAllTeachersAndStudents() {
@@ -150,12 +150,12 @@ public class EducationMSController {
         return ResponseEntity.ok(result);
     }
 
-    // Teacher Module Endpoints
+    //教师模块接口
     
     /**
-     * Add new course section
-     * @param section Section information
-     * @return Response with operation result
+     * 添加开课信息
+     * @param section 开课信息对象
+     * @return 操作结果
      */
     @PostMapping("/teachers/sections")
     public ResponseEntity<ApiResult> addSection(@RequestBody Section section) {
@@ -164,9 +164,9 @@ public class EducationMSController {
     }
     
     /**
-     * Delete course section
-     * @param sectionId Section ID
-     * @return Response with operation result
+     * 删除开课信息
+     * @param sectionId 开课信息ID
+     * @return 操作结果
      */
     @DeleteMapping("/teachers/sections/{sectionId}")
     public ResponseEntity<ApiResult> deleteSection(@PathVariable int sectionId) {
@@ -175,9 +175,9 @@ public class EducationMSController {
     }
     
     /**
-     * Update course section
-     * @param section Section information
-     * @return Response with operation result
+     * 更新开课信息
+     * @param section 开课信息对象
+     * @return 操作结果
      */
     @PutMapping("/teachers/sections")
     public ResponseEntity<ApiResult> updateSection(@RequestBody Section section) {
@@ -186,9 +186,9 @@ public class EducationMSController {
     }
     
     /**
-     * Submit course grades
-     * @param grades List of grades
-     * @return Response with operation result
+     * 提交成绩
+     * @param grades 成绩列表
+     * @return 操作结果
      */
     @PostMapping("/teachers/grades")
     public ResponseEntity<ApiResult> submitGrades(@RequestBody List<Grade> grades) {
@@ -197,11 +197,11 @@ public class EducationMSController {
     }
     
     /**
-     * Request grade change
-     * @param takeId Course enrollment ID
-     * @param newGrade New grade
-     * @param reason Reason for change
-     * @return Response with operation result
+     * 申请修改成绩
+     * @param takeId 选课ID
+     * @param newGrade 新成绩
+     * @param reason 修改原因
+     * @return 操作结果
      */
     @PostMapping("/teachers/grades/change-request")
     public ResponseEntity<ApiResult> requestGradeChange(
@@ -213,13 +213,21 @@ public class EducationMSController {
     }
     
     /**
-     * Analyze course grades
-     * @param sectionId Section ID
-     * @return Response with grade analysis result
-     */
+     * 分析课程成绩
+     * @param sectionId 开课信息ID
+     * @return 包含成绩分析结果的响应
+
     @GetMapping("/teachers/sections/{sectionId}/grades/analysis")
     public ResponseEntity<ApiResult> analyzeCourseGrades(@PathVariable int sectionId) {
         ApiResult result = service.analyzeGradeTeacher(sectionId);
         return ResponseEntity.ok(result);
     }
+     */
+
+    @GetMapping("/teachers/sections/{sectionId}/grades/analysis")
+    public ResponseEntity<ApiResult> analyzeCourseGrades(@PathVariable int sectionId) {
+        ApiResult result = service.analyzeGradeTeacher(sectionId);
+        return ResponseEntity.ok(result);
+    }
+
 }

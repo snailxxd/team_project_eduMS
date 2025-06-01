@@ -91,10 +91,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDTO updateCourse(int courseId, CourseDTO dto) {
-        if (!isTeacher()) {
-            throw new SecurityException("仅教师可修改课程");
-        }
-
         // 更新 Course
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("找不到课程ID: " + courseId));
@@ -109,14 +105,6 @@ public class CourseServiceImpl implements CourseService {
         course.setGradeYear(dto.getGradeYear());
         courseRepository.save(course);
 
-        List<Section> sections = sectionRepository.findByCourseId(courseId);
-
-        for (Section section : sections) {
-            section.setYear(dto.getGradeYear());
-        }
-
-        sectionRepository.saveAll(sections);
-
         return toCourseDTO(course, course.getRequiredRoomType(), course.getGradeYear(), course.getPeriod());
     }
 
@@ -129,12 +117,6 @@ public class CourseServiceImpl implements CourseService {
 
         // 删除课程对应的所有 Section
         List<Section> sections = sectionRepository.findByCourseId(courseId);
-
-        for (Section section : sections) {
-            if (section.getTeacherId() != getCurrentUserId()) {
-                throw new SecurityException("无权删除他人课程信息");
-            }
-        }
 
         // 先删除所有开课区段
         sectionRepository.deleteAll(sections);

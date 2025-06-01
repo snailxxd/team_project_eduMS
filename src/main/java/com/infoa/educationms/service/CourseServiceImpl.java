@@ -211,12 +211,19 @@ public class CourseServiceImpl implements CourseService {
         return rankList;
     }
 
-    // 这里是示范用的分数转 GPA 方法，你可以替换成自己的逻辑
     private double convertGradeToGpa(int grade) {
-        if (grade >= 90) return 4.0;
-        if (grade >= 80) return 3.0;
-        if (grade >= 70) return 2.0;
-        if (grade >= 60) return 1.0;
+        if (grade >= 95) return 5.0;
+        if (grade >= 92) return 4.8;
+        if (grade >= 89) return 4.5;
+        if (grade >= 86) return 4.2;
+        if (grade >= 83) return 3.9;
+        if (grade >= 80) return 3.6;
+        if (grade >= 77) return 3.3;
+        if (grade >= 74) return 3.0;
+        if (grade >= 70) return 2.7;
+        if (grade >= 67) return 2.4;
+        if (grade >= 64) return 2.1;
+        if (grade >= 60) return 1.8;
         return 0.0;
     }
 

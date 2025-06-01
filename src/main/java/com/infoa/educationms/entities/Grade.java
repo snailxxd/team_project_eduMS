@@ -13,7 +13,7 @@ public class Grade {
     @Column(name = "type")
     private String gradeType;
 
-    @Column(name = "take_id")
+    @Column(name = "takes_id")
     private int takeId;
 
     private String name;

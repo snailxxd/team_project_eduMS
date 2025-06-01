@@ -55,7 +55,7 @@ public class GradeServiceImpl implements GradeService {
                 gradeDTO.setGradeId(grade.getGradeId());
                 gradeDTO.setGrade(grade.getGrade());
                 gradeDTO.setTakesId(take.getTakeId());
-                gradeDTO.setProportion((double) grade.getProportion());
+                gradeDTO.setProportion(grade.getProportion());
                 gradeDTO.setType(grade.getGradeType());
                 gradeDTO.setStudentId(studentId);
                 gradeDTO.setStudentName(personalInfo.getName());

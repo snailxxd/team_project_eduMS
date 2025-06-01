@@ -21,7 +21,6 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
     // 查询某种类型的所有成绩
     List<Grade> findByGradeType(String gradeType);
 
-    List<Grade> findByStudentId(int studentId);
 
     // 查询某个section的所有成绩(需要Grade实体有sectionId字段)
     @Query("SELECT g FROM Grade g, Take t WHERE g.takeId = t.takeId AND t.sectionId = :sectionId")

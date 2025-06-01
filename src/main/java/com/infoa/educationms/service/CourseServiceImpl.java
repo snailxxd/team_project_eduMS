@@ -111,10 +111,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void deleteCourse(int courseId) {
-        if (!isTeacher()) {
-            throw new SecurityException("仅教师可删除课程");
-        }
-
         // 删除课程对应的所有 Section
         List<Section> sections = sectionRepository.findByCourseId(courseId);
 

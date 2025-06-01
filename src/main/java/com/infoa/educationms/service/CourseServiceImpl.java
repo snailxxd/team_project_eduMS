@@ -124,13 +124,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseStatsDTO getCourseStats(int sectionId) {
-        Section section = sectionRepository.findById(sectionId).orElse(null);
-        if (section == null || section.getTeacherId() != getCurrentUserId()) {
+    /*    if (!isTeacher()) {
+            throw new SecurityException("仅教师可查看课程统计信息");
+        }*/
+        List<Section> section = sectionRepository.findBySectionId(sectionId);
+        if (section.isEmpty() || section.get(0).getTeacherId() != getCurrentUserId()) {
             throw new SecurityException("无权查看该课程");
         }
 
         // 假设通过 section 获取对应的 Course 信息
-        Course course = courseRepository.findById(section.getCourseId()).orElse(null);
+        Course course = courseRepository.findById(section.get(0).getCourseId()).orElse(null);
         if (course == null) {
             throw new IllegalStateException("课程不存在");
         }
@@ -168,8 +171,11 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<StudentRankDTO> getCourseStudentRanks(int sectionId) {
-        Section section = sectionRepository.findById(sectionId).orElse(null);
-        if (section == null || section.getTeacherId() != getCurrentUserId()) {
+        /*if (!isTeacher()) {
+            throw new SecurityException("仅教师可查看学生成绩排名");
+        }*/
+        List<Section> section = sectionRepository.findBySectionId(sectionId);
+        if (section.isEmpty() || section.get(0).getTeacherId() != getCurrentUserId()) {
             throw new SecurityException("无权查看该课程学生成绩");
         }
 
@@ -205,19 +211,12 @@ public class CourseServiceImpl implements CourseService {
         return rankList;
     }
 
+    // 这里是示范用的分数转 GPA 方法，你可以替换成自己的逻辑
     private double convertGradeToGpa(int grade) {
-        if (grade >= 95) return 5.0;
-        if (grade >= 92) return 4.8;
-        if (grade >= 89) return 4.5;
-        if (grade >= 86) return 4.2;
-        if (grade >= 83) return 3.9;
-        if (grade >= 80) return 3.6;
-        if (grade >= 77) return 3.3;
-        if (grade >= 74) return 3.0;
-        if (grade >= 70) return 2.7;
-        if (grade >= 67) return 2.4;
-        if (grade >= 64) return 2.1;
-        if (grade >= 60) return 1.8;
+        if (grade >= 90) return 4.0;
+        if (grade >= 80) return 3.0;
+        if (grade >= 70) return 2.0;
+        if (grade >= 60) return 1.0;
         return 0.0;
     }
 

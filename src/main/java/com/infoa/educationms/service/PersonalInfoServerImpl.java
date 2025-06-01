@@ -20,11 +20,11 @@ public class PersonalInfoServerImpl implements PersonalInforServer {
     public PersonalInfoDTO createPersonalInfor(PersonalInfoDTO personalInfoDTO){
 
         PersonalInfor personalInfor = new PersonalInfor();
-        personalInfor.setPersonalInfoId(personalInfoDTO.getPersonalInforId());
         personalInfor.setName(personalInfoDTO.getName());
         personalInfor.setPicture(personalInfoDTO.getPicture());
         personalInfor.setPhoneNumber(personalInfoDTO.getPhoneNumber());
-        personalInfoRepository.save(personalInfor);
+        PersonalInfor p_return = personalInfoRepository.save(personalInfor);
+        personalInfoDTO.setPersonalInforId(p_return.getPersonalInfoId());
         return personalInfoDTO;
     }
 
@@ -36,6 +36,7 @@ public class PersonalInfoServerImpl implements PersonalInforServer {
         personalInfor.setName(personalInfoDTO.getName());
         personalInfor.setPicture(personalInfoDTO.getPicture());
         personalInfor.setPhoneNumber(personalInfoDTO.getPhoneNumber());
+        System.out.println("asjdgiauwdaowhodhdaouwhdoad" + personalInfoDTO.getPhoneNumber());
         personalInfoRepository.save(personalInfor);
         return personalInfoDTO;
     }

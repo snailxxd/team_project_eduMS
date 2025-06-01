@@ -16,7 +16,7 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
      * @return 该课程的所有section列表
      */
     List<Section> findByCourseId(int courseId);
-
+    List<Section> findBySectionId(int id);
 
     /**
      * 根据教师ID查询所有授课的section

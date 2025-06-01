@@ -3,7 +3,9 @@ package com.infoa.educationms.controller;
 import com.infoa.educationms.DTO.PersonalInfoDTO;
 import com.infoa.educationms.entities.PersonalInfor;
 import com.infoa.educationms.queries.ApiResult;
+import com.infoa.educationms.repository.PersonalInfoRepository;
 import com.infoa.educationms.service.EducationMSService;
+import com.infoa.educationms.service.PersonalInforServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,29 +15,23 @@ import org.springframework.web.bind.annotation.*;
 public class PersonalInfoController {
 
     @Autowired
-    private EducationMSService educationMSService;
+    private PersonalInforServer personalInforServer;
+    @Autowired
+    private PersonalInfoRepository personalInfoRepository;
 
     @PostMapping("/personal-information")
-    public ResponseEntity<ApiResult> createPersonalInfo(@RequestParam int userId, @RequestBody PersonalInfoDTO dto) {
+    public ResponseEntity<PersonalInfoDTO> createPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO) {
         // 实际上服务层没有创建，只能用 updatePersonalInfo 来设置或更新
-        PersonalInfor info = convertToEntity(dto);
-        ApiResult result = educationMSService.updatePersonalInfo(userId, info);
-        return ResponseEntity.ok(result);
+        PersonalInfoDTO personalInfoDTO1 = personalInforServer.createPersonalInfor(personalInfoDTO);
+        return ResponseEntity.ok(personalInfoDTO1);
     }
 
     @PutMapping("/personal-information/{userId}")
-    public ResponseEntity<ApiResult> updatePersonalInfo(
+    public ResponseEntity<PersonalInfoDTO> updatePersonalInfo(
             @PathVariable Integer userId,
             @RequestBody PersonalInfoDTO dto) {
-        PersonalInfor info = convertToEntity(dto);
-        ApiResult result = educationMSService.updatePersonalInfo(userId, info);
-        return ResponseEntity.ok(result);
+        PersonalInfoDTO personalInfoDTO = personalInforServer.updatePersonalInfor(dto, userId);
+        return ResponseEntity.ok(personalInfoDTO);
     }
 
-    private PersonalInfor convertToEntity(PersonalInfoDTO dto) {
-        PersonalInfor info = new PersonalInfor();
-        info.setName(dto.getName());
-
-        return info;
-    }
 }

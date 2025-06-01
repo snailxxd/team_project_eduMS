@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PersonalInfoRepository extends JpaRepository<PersonalInfor, Integer> {
 
     PersonalInfor findOneByPersonalInfoId(int id);
+    PersonalInfor save(PersonalInfor personalInfor);
 }

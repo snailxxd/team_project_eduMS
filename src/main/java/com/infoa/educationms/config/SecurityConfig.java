@@ -20,10 +20,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                /*
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
+                        // 允许所有静态资源访问
+                        .requestMatchers("/index.html", "/assets/**", "/favicon.ico").permitAll()
+                        // 允许所有前端路由路径
+                        .requestMatchers("/information-manage", "/course-manage", "/grade-query",
+                                "/grade-modify", "/grade-analyze").permitAll()
+                        // API需要认证
+                        .requestMatchers("/api/**").authenticated()
                 )
-                .formLogin(withDefaults()) // 使用默认登录页
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/information-manage", true) // 登录成功后强制跳转到根路径
+                        .permitAll()
+                )*/
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .anyRequest().permitAll() // 允许所有请求
+                )
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }

@@ -25,7 +25,7 @@ public class CourseArrangementController {
     }
 
     // 查询所有课程信息
-    @GetMapping("/courses")
+    @GetMapping("/courses1")
     public ResponseEntity<List<CaCourseDTO>> getAllCourses() {
         return ResponseEntity.ok(service.getAllCourses());
     }

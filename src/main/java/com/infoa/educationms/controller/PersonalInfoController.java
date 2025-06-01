@@ -1,5 +1,6 @@
 package com.infoa.educationms.controller;
 
+import com.infoa.educationms.DTO.PersonalInfoDTO;
 import com.infoa.educationms.entities.PersonalInfo;
 import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.service.EducationMSService;
@@ -34,8 +35,7 @@ public class PersonalInfoController {
     private PersonalInfo convertToEntity(PersonalInfoDTO dto) {
         PersonalInfo info = new PersonalInfo();
         info.setName(dto.getName());
-        info.setEmail(dto.getEmail());
-        // 设置更多字段...
+
         return info;
     }
 }

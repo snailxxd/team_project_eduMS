@@ -1,9 +1,7 @@
 package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.*;
-import com.infoa.educationms.entities.User;
-import com.infoa.educationms.entities.UserRole;
-import com.infoa.educationms.entities.PersonalInfo;
+import com.infoa.educationms.entities.*;
 import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.service.EducationMSService;
 
@@ -101,29 +99,33 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    // --- DTO 转实体类工具方法（示例） ---
-    private User dtoToUser(UserDTO dto) {
-        User user = new User();
-        user.setUsername(dto.getUsername());
+    private Student studentDtoToUser(StudentDTO dto) {
+        Student student = new Student();
+        copyCommonFields(student, dto);
+        // 设置 Student 特有字段
+        // student.setStudentNumber(dto.getStudentNumber());
+        return student;
+    }
+
+    private Teacher teacherDtoToUser(TeacherDTO dto) {
+        Teacher teacher = new Teacher();
+        copyCommonFields(teacher, dto);
+        // 设置 Teacher 特有字段
+        return teacher;
+    }
+
+    private Admin adminDtoToUser(AdministratorDTO dto) {
+        Admin admin = new Admin();
+        copyCommonFields(admin, dto);
+        // 设置 Admin 特有字段
+        return admin;
+    }
+
+    private void copyCommonFields(User user, UserDTO dto) {
+        user.setAccountNumber(dto.getAccountNumber());
         user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
-        // ... 其他字段
-        return user;
-    }
-
-    private User studentDtoToUser(StudentDTO dto) {
-        // 同上
-        return dtoToUser(dto);
-    }
-
-    private User teacherDtoToUser(TeacherDTO dto) {
-        // 同上
-        return dtoToUser(dto);
-    }
-
-    private User adminDtoToUser(AdministratorDTO dto) {
-        // 同上
-        return dtoToUser(dto);
+        user.setPersonalInfoId(dto.getPersonalInfoId());
+        user.setUserType(dto.getUserType());
     }
 
     private PersonalInfo studentDtoToPersonalInfo(StudentDTO dto) {

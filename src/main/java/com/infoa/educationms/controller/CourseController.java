@@ -1,6 +1,7 @@
 package com.infoa.educationms.controller;
 
 
+import com.infoa.educationms.DTO.CourseDTO;
 import com.infoa.educationms.entities.Section;
 import com.infoa.educationms.queries.ApiResult;
 import com.infoa.educationms.service.EducationMSService;
@@ -57,9 +58,14 @@ public class CourseController {
 
     private Section convertToSection(CourseDTO dto) {
         Section section = new Section();
-        section.setCourseName(dto.getName());
+        section.setCourseId(dto.getCourseId());
         section.setSemester(dto.getSemester());
-        // 更多字段...
+        section.setYear(dto.getYear());
+        section.setClassroomId(dto.getClassroomId());
+        section.setTimeSlotIdList(dto.getTimeSlotIds());
+        section.setTeacherId(dto.getTeacherId());
+        section.setTime(dto.getTime());
         return section;
     }
+
 }

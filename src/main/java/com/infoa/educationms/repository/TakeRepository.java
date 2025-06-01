@@ -29,7 +29,7 @@ public interface TakeRepository extends JpaRepository<Take, Integer> {
     List<Take> findBySectionIdIn(List<Integer> sectionIds);
 
 
-    Take findByTakeId(int takeId);
+    Take findOneByTakeId(Integer takeId);
 
     List<Take> findBySectionId(Integer sectionId);
 
@@ -39,4 +39,6 @@ public interface TakeRepository extends JpaRepository<Take, Integer> {
      * @return 该学生的所有选课记录列表
      */
     List<Take> findByStudentId(Integer studentId);
+
+
 }

@@ -47,7 +47,7 @@ public class GradeServiceImpl implements GradeService {
         for (Take take : takes) {
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
             Section section = sectionRepository.findOneBySectionId(take.getSectionId());
-            Course course = courseRepository.findByCourseId(section.getCourseId());
+            Course course = courseRepository.findOneByCourseId(section.getCourseId());
             for (Grade grade : grades) {
                 GradeDTO gradeDTO = new GradeDTO();
                 gradeDTO.setGradeId(grade.getGradeId());
@@ -78,7 +78,7 @@ public class GradeServiceImpl implements GradeService {
         List<StudentGradeDTO> studentGradeDTOS = new ArrayList<>();
         for (Take take : takes) {
             Section section = sectionRepository.findOneBySectionId(take.getSectionId());
-            Course course = courseRepository.findByCourseId(section.getCourseId());
+            Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
 
             double sum = 0;
@@ -102,7 +102,7 @@ public class GradeServiceImpl implements GradeService {
         List<Section> sections = sectionRepository.findByTeacherId(teacherId);
         List<GradeStatusDTO> gradestaetusDTOs = new ArrayList<>();
         for (Section section : sections) {
-            Course course = courseRepository.findByCourseId(section.getCourseId());
+            Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
             for (Take take : takes) {
                 GradeStatusDTO gradestatusDTO = new GradeStatusDTO();

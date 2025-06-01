@@ -1,15 +1,8 @@
 package com.infoa.educationms.service;
 
 import com.infoa.educationms.DTO.GradeChangeDTO;
-import com.infoa.educationms.entities.GradeChange;
-import com.infoa.educationms.entities.PersonalInfor;
-import com.infoa.educationms.entities.Student;
-import com.infoa.educationms.entities.User;
-import com.infoa.educationms.entities.Course;
-import com.infoa.educationms.entities.Grade;
-import com.infoa.educationms.repository.GradeChangeRepository;
-import com.infoa.educationms.repository.PersonalInfoRepository;
-import com.infoa.educationms.repository.GradeRepository;
+import com.infoa.educationms.entities.*;
+import com.infoa.educationms.repository.*;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +23,18 @@ public class GradeChangeServiceImpl implements GradeChangeService {
 
     @Autowired
     private PersonalInfoRepository personalInfoRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private SectionRepository sectionRepository;
+
+    @Autowired
+    private TakeRepository takeRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
     
     @Autowired
     private  GradeRepository gradeRepository;
@@ -81,9 +86,10 @@ public class GradeChangeServiceImpl implements GradeChangeService {
     // 实体转DTO（包含时间格式转换）
     private GradeChangeDTO convertToDTO(GradeChange gradeChange) {
         GradeChangeDTO dto = new GradeChangeDTO();
-        
-        Student student = gradeChangeRepository.findOneByTakesId(gradeChange.getTakeId());
-        Course course = gradeChangeRepository.findOnecByTakesId(gradeChange.getTakeId());
+        Take take = takeRepository.findOneByTakeId(gradeChange.getTakeId());
+        Student student = studentRepository.findOneByUserId(take.getStudentId());
+        Section section = sectionRepository.findOneBySectionId(take.getSectionId());
+        Course course = courseRepository.findOneByCourseId(section.getCourseId());
         PersonalInfor personalInfor = personalInfoRepository.findOneByPersonalInfoId(student.getPersonalInfoId());
         Grade grade = gradeRepository.findOneByGradeId(gradeChange.getGradeId());
         // 复制基础字段

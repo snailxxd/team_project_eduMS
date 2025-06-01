@@ -12,4 +12,6 @@ public interface GradeChangeRepository extends JpaRepository<GradeChange, Intege
     List<Boolean> findResultByGradeId(Integer gradeId);
 
     List<GradeChange> findByGradeId(Integer gradeId);
+    List<GradeChange> findByResultIsNull();
+
 }

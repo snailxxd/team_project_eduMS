@@ -17,7 +17,6 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
      */
     List<Section> findByCourseId(int courseId);
 
-    Section findOneBySectionId(int sectionId);
 
     /**
      * 根据教师ID查询所有授课的section
@@ -33,4 +32,5 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
      */
     Optional<Section> findFirstByCourseId(Integer courseId);
 
+    Section findOneBySectionId(Integer sectionId);
 }

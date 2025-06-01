@@ -16,4 +16,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     @Query("SELECT DISTINCT c FROM Course c JOIN Section s ON c.courseId = s.courseId WHERE s.teacherId = :teacherId")
     List<Course> findByTeacherId(@Param("teacherId") Integer teacherId);
+
+    Course findByCourseId(Integer courseId);
 }

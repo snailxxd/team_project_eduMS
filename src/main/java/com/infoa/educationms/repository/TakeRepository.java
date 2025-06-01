@@ -28,6 +28,9 @@ public interface TakeRepository extends JpaRepository<Take, Integer> {
      */
     List<Take> findBySectionIdIn(List<Integer> sectionIds);
 
+
+    List<Take> findByTakeId(int takeId);
+
     List<Take> findBySectionId(Integer sectionId);
 
     /**

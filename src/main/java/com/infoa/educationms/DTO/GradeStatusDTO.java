@@ -3,7 +3,7 @@ package com.infoa.educationms.DTO;
 import lombok.Data;
 
 @Data
-public class GradeStatetusDTO {
+public class GradeStatusDTO {
     private String id;
     private Integer studentId;
     private String studentName;

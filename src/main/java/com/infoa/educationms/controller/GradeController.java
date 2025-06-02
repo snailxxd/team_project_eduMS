@@ -33,6 +33,7 @@ public class GradeController {
     @GetMapping("/grades/teacher/{teacherId}")
     public ResponseEntity<List<GradeStatusDTO>> getTeacherGrades(@PathVariable Integer teacherId) {
         // 复用成绩分析
+
         List<GradeStatusDTO> result = gradeService.getAllStudentGradesBySection(teacherId);
         return ResponseEntity.ok(result);
     }

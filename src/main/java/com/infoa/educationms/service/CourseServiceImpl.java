@@ -123,7 +123,7 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public List<CourseStatsDTO> getCourseStats(Integer teacherId) {
+    public List<CourseStatsDTO>     getCourseStats(Integer teacherId) {
 
         // 假设通过 section 获取对应的 Course 信息
         List<Section> sections = sectionRepository.findByTeacherId(teacherId);

@@ -8,8 +8,8 @@ public class CourseStatsDTO {
     private Integer teacherId;
     private Integer courseId;
     private String courseName;
-    private Double average;
-    private Double gpa;
+    private Float average;
+    private Float gpa;
     private  Integer totalStudents;
     private List<Integer> scores;
 

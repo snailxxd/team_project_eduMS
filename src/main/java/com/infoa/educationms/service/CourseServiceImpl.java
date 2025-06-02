@@ -174,8 +174,8 @@ public class CourseServiceImpl implements CourseService {
             CourseStatsDTO dto = new CourseStatsDTO();
             dto.setCourseId(course.getCourseId());
             dto.setCourseName(course.getTitle());
-            dto.setGpa(gpa);
-            dto.setAverage(average);
+            dto.setGpa((float) gpa);
+            dto.setAverage((float) average);
             dto.setTeacherId(teacherId);
             dto.setTotalStudents(takes.size());
             dto.setScores(scores);
@@ -238,7 +238,7 @@ public class CourseServiceImpl implements CourseService {
             dto.setStudentId(studentId);
             dto.setStudentName(studentName);
             dto.setScore((int) Math.round(totalScore));
-            dto.setGpa(gpa);
+            dto.setGpa((float) gpa);
 
             rankList.add(dto);
         }

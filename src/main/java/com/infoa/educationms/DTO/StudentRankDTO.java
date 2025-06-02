@@ -7,7 +7,7 @@ public class StudentRankDTO {
     private Integer studentId;
     private String studentName;
     private Integer score;
-    private Double gpa;
+    private Float gpa;
 
 
 }

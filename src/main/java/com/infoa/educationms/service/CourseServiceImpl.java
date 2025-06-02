@@ -209,7 +209,7 @@ public class CourseServiceImpl implements CourseService {
                 .toList();
 
         for (Map.Entry<Integer, List<Grade>> entry : sortedEntries) {
-            Integer studentId = entry.getKey();
+            Integer takeId = entry.getKey(); // 修正命名
             List<Grade> studentGrades = entry.getValue();
 
             double totalScore = studentGrades.stream()
@@ -217,24 +217,32 @@ public class CourseServiceImpl implements CourseService {
                     .sum();
 
             double gpa = studentGrades.stream()
-                    .mapToDouble(g -> convertGradeToGpa(g.getGrade()))
-                    .average().orElse(0.0); // 可换成你自己的加权 GPA 逻辑
+                    .mapToDouble(g -> convertGradeToGpa(g.getGrade()) * g.getProportion())
+                    .sum(); // 加权 GPA
 
-            String studentName = studentRepository.findById(studentId)
-                    .map(student -> personalInfoRepository.findById(student.getPersonalInfoId())
-                            .map(PersonalInfor::getName)
-                            .orElse("未知"))
-                    .orElse("未知");
+            // 通过 takeId 找到 studentId
+            Optional<Take> takeOpt = takeRepository.findById(takeId);
+            int studentId = takeOpt.map(Take::getStudentId).orElse(-1);
+
+            String studentName = "未知";
+            if (studentId != -1) {
+                studentName = studentRepository.findById(studentId)
+                        .map(student -> personalInfoRepository.findById(student.getPersonalInfoId())
+                                .map(PersonalInfor::getName)
+                                .orElse("未知"))
+                        .orElse("未知");
+            }
 
             StudentRankDTO dto = new StudentRankDTO();
             dto.setRank(rank++);
             dto.setStudentId(studentId);
             dto.setStudentName(studentName);
-            dto.setScore((int) Math.round(totalScore)); // 四舍五入转 int
+            dto.setScore((int) Math.round(totalScore));
             dto.setGpa(gpa);
 
             rankList.add(dto);
         }
+
 
         return rankList;
     }

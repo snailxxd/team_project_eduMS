@@ -143,16 +143,34 @@ public class CourseServiceImpl implements CourseService {
                 scores.add(i);
                 point.add(convertGradeToGpa(i));
             }
-            Integer total = 0;
-            Double totalp = 0.0;
-            for (Integer i : scores) {
-                total += i;
+
+            double totalGpaSum = 0;
+            double totalProportion = 0;
+
+            for (Take take : takes) {
+                List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
+
+                double studentWeightedScore = 0;
+                double studentWeightedGpa = 0;
+                double studentTotalWeight = 0;
+
+                for (Grade grade : grades) {
+                    double weight = grade.getProportion();
+                    studentWeightedScore += grade.getGrade() * weight;
+                    studentWeightedGpa += convertGradeToGpa(grade.getGrade()) * weight;
+                    studentTotalWeight += weight;
+                }
+
+                if (studentTotalWeight > 0) {
+                    scores.add((int)Math.round(studentWeightedScore));
+                    totalGpaSum += studentWeightedGpa / studentTotalWeight;
+                    totalProportion++;
+                }
             }
-            for (Double d : point) {
-                totalp += d;
-            }
-            Double average = (double)total/(double)scores.size();
-            Double gpa = average/totalp;
+
+            double average = scores.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+            double gpa = totalProportion > 0 ? totalGpaSum / totalProportion : 0.0;
+
             CourseStatsDTO dto = new CourseStatsDTO();
             dto.setCourseId(course.getCourseId());
             dto.setCourseName(course.getTitle());
@@ -168,39 +186,52 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<StudentRankDTO> getCourseStudentRanks(int sectionId) {
-        /*if (!isTeacher()) {
-            throw new SecurityException("仅教师可查看学生成绩排名");
-        }*/
-        List<Section> section = sectionRepository.findBySectionId(sectionId);
-        if (section.isEmpty() || section.get(0).getTeacherId() != getCurrentUserId()) {
-            throw new SecurityException("无权查看该课程学生成绩");
-        }
-
         List<Grade> grades = gradeRepository.findBySectionId(sectionId);
 
-        // 按成绩降序排序
-        List<Grade> sortedGrades = grades.stream()
-                .sorted((g1, g2) -> Integer.compare(g2.getGrade(), g1.getGrade()))
-                .toList();
+        // 按学生分组
+        Map<Integer, List<Grade>> gradeGroups = grades.stream()
+                .collect(Collectors.groupingBy(Grade::getTakeId));
 
-        // 给学生排名
         List<StudentRankDTO> rankList = new ArrayList<>();
         int rank = 1;
-        for (Grade g : sortedGrades) {
-            StudentRankDTO dto = new StudentRankDTO();
-            dto.setRank(rank++);
-            dto.setStudentId(g.getTakeId());
 
-            String studentName = studentRepository.findById(g.getTakeId())
+        // 将学生分组后按加权总分排序
+        List<Map.Entry<Integer, List<Grade>>> sortedEntries = gradeGroups.entrySet().stream()
+                .sorted((e1, e2) -> {
+                    double total1 = e1.getValue().stream()
+                            .mapToDouble(g -> g.getGrade() * g.getProportion())
+                            .sum();
+                    double total2 = e2.getValue().stream()
+                            .mapToDouble(g -> g.getGrade() * g.getProportion())
+                            .sum();
+                    return Double.compare(total2, total1); // 降序
+                })
+                .toList();
+
+        for (Map.Entry<Integer, List<Grade>> entry : sortedEntries) {
+            Integer studentId = entry.getKey();
+            List<Grade> studentGrades = entry.getValue();
+
+            double totalScore = studentGrades.stream()
+                    .mapToDouble(g -> g.getGrade() * g.getProportion())
+                    .sum();
+
+            double gpa = studentGrades.stream()
+                    .mapToDouble(g -> convertGradeToGpa(g.getGrade()))
+                    .average().orElse(0.0); // 可换成你自己的加权 GPA 逻辑
+
+            String studentName = studentRepository.findById(studentId)
                     .map(student -> personalInfoRepository.findById(student.getPersonalInfoId())
                             .map(PersonalInfor::getName)
                             .orElse("未知"))
                     .orElse("未知");
 
-
+            StudentRankDTO dto = new StudentRankDTO();
+            dto.setRank(rank++);
+            dto.setStudentId(studentId);
             dto.setStudentName(studentName);
-            dto.setScore(g.getGrade());
-            dto.setGpa(convertGradeToGpa(g.getGrade()));
+            dto.setScore((int) Math.round(totalScore)); // 四舍五入转 int
+            dto.setGpa(gpa);
 
             rankList.add(dto);
         }

@@ -138,15 +138,16 @@ public class GradeServiceImpl implements GradeService {
                         }
                     }
 
-                    Integer i = (int)sum;
-                    gradestatusDTO.setGrade(i);
-                    gradestatusDTO.setStudentId(take.getStudentId());
-                    gradestatusDTO.setId(Integer.toString(grade.getGradeId()));
-                    gradestatusDTO.setStudentName(personalInfo.getName());
-                    gradestatusDTO.setCourseId(section.getCourseId());
-                    gradestatusDTO.setCourseName(course.getTitle());
-                    gradestatusDTOs.add(gradestatusDTO);
                 }
+
+                Integer i = (int)sum;
+                gradestatusDTO.setGrade(i);
+                gradestatusDTO.setStudentId(take.getStudentId());
+                gradestatusDTO.setId(Integer.toString(section.getCourseId()));
+                gradestatusDTO.setStudentName(personalInfo.getName());
+                gradestatusDTO.setCourseId(section.getCourseId());
+                gradestatusDTO.setCourseName(course.getTitle());
+                gradestatusDTOs.add(gradestatusDTO);
             }
         }
         return gradestatusDTOs;

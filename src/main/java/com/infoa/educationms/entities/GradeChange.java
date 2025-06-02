@@ -1,6 +1,8 @@
 package com.infoa.educationms.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,6 +35,10 @@ public class GradeChange {
 
     @Column(name = "reason")
     private String reason;
+
+    @Column(name = "grade_type")
+    private String type;
+
 
     // constructors
     public GradeChange() {}
@@ -132,7 +138,7 @@ public class GradeChange {
     public String getReason() {
         return reason;
     }
-    
+
     public void setReason(String reason) {
         this.reason = reason;
     }

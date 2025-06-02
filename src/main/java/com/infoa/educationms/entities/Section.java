@@ -40,7 +40,7 @@ public class Section {
     // constructors
     public Section() {}
 
-    public Section(int sectionId, int courseId, String semester, int year, int classroomId, JsonNode timeSlotId, int teacherId) {
+    public Section(int sectionId, int courseId, String semester, int year, int classroomId, JsonNode timeSlotId, int teacherId, int time) {
         this.sectionId = sectionId;
         this.courseId = courseId;
         this.semester = semester;
@@ -48,6 +48,7 @@ public class Section {
         this.classroomId = classroomId;
         this.timeSlotId = timeSlotId;
         this.teacherId = teacherId;
+        this.time = time;
     }
 
     // 转换为字符串
@@ -60,6 +61,7 @@ public class Section {
                 ", classroomId=" + classroomId +
                 ", timeSlotId=" + timeSlotId +
                 ", teacherId=" + teacherId +
+                ", time=" + time +
                 '}';
     }
 

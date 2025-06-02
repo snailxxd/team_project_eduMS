@@ -43,7 +43,7 @@ public class CourseController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<List<CourseStatsDTO>> getCourseStats(Integer teacherId) {
+    public ResponseEntity<List<CourseStatsDTO>> getCourseStats(@PathVariable Integer teacherId) {
         // 这里传入-1代表全局统计，您可以根据需要调整
         List<CourseStatsDTO> result = courseService.getCourseStats(teacherId);
         return ResponseEntity.ok(result);

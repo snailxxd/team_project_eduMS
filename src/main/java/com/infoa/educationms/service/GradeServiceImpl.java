@@ -42,12 +42,35 @@ public class GradeServiceImpl implements GradeService {
         List<GradeDTO> gradeDTOS = new ArrayList<>();
 
         User user = userRepository.findOneByUserId(studentId);
+        // 检查user是否为null
+        if (user == null) {
+            // 用户未找到，可以记录日志并返回空列表，或抛出异常
+            // 例如: log.warn("User not found with studentId: {}", studentId);
+            return gradeDTOS; // 返回空列表
+        }
+
         PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
+        // 同样检查personalInfo是否为null，以避免后续的NullPointerException
+        if (personalInfo == null) {
+            // 个人信息未找到，可以记录日志
+            // 例如: log.warn("PersonalInfo not found for user: {}", studentId);
+            // 根据业务需求决定如何处理：
+            // 1. 返回空列表或部分填充的DTO（如果允许）
+            // 2. 抛出异常
+            // 此处选择继续，但学生姓名将无法设置，或者您可以选择返回
+            // return gradeDTOS;
+        }
 
         for (Take take : takes) {
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
             Section section = sectionRepository.findOneBySectionId(take.getSectionId());
-            Course course = courseRepository.findOneByCourseId(section.getCourseId());
+            Course course = courseRepository.findOneByCourseId(section.getCourseId()); // 建议也检查section和course是否为null
+
+            if (section == null || course == null) {
+                // log.warn("Section or Course not found for takeId: {}", take.getTakeId());
+                continue; // 跳过这个take记录
+            }
+
             for (Grade grade : grades) {
                 GradeDTO gradeDTO = new GradeDTO();
                 gradeDTO.setGradeId(grade.getGradeId());
@@ -56,7 +79,12 @@ public class GradeServiceImpl implements GradeService {
                 gradeDTO.setProportion(grade.getProportion());
                 gradeDTO.setType(grade.getGradeType());
                 gradeDTO.setStudentId(studentId);
-                gradeDTO.setStudentName(personalInfo.getName());
+                // 只有在personalInfo不为null时才设置学生姓名
+                if (personalInfo != null) {
+                    gradeDTO.setStudentName(personalInfo.getName());
+                } else {
+                    gradeDTO.setStudentName("未知学生"); // 或者其他默认值
+                }
                 gradeDTO.setCourseName(course.getTitle());
                 gradeDTO.setCourseId(course.getCourseId());
                 gradeDTOS.add(gradeDTO);
@@ -64,6 +92,7 @@ public class GradeServiceImpl implements GradeService {
         }
         return gradeDTOS;
     }
+
 
     private double convertGradeToGpa(int grade) {
         if (grade >= 90) return 4.0;
@@ -138,8 +167,8 @@ public class GradeServiceImpl implements GradeService {
                         }
                     }
 
-                }
 
+                }
                 Integer i = (int)sum;
                 gradestatusDTO.setGrade(i);
                 gradestatusDTO.setStudentId(take.getStudentId());

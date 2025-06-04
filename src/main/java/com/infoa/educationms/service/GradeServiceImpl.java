@@ -2,6 +2,7 @@ package com.infoa.educationms.service;
 
 import com.infoa.educationms.DTO.GradeDTO;
 import com.infoa.educationms.DTO.GradeStatusDTO;
+import com.infoa.educationms.DTO.OutGradeDTO;
 import com.infoa.educationms.DTO.StudentGradeDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
@@ -101,7 +102,7 @@ public class GradeServiceImpl implements GradeService {
         if (grade >= 60) return 1.0;
         return 0.0;
     }
-
+    @Override
     public List<StudentGradeDTO> getAllStudentGrades(Integer studentId){
         List<Take> takes = takeRepository.findByStudentId(studentId);
         List<StudentGradeDTO> studentGradeDTOS = new ArrayList<>();
@@ -126,7 +127,7 @@ public class GradeServiceImpl implements GradeService {
         }
         return studentGradeDTOS;
     }
-
+    @Override
     public List<GradeStatusDTO> getAllStudentGradesBySection(Integer teacherId){
         List<Section> sections = sectionRepository.findByTeacherId(teacherId);
         List<GradeStatusDTO> gradestatusDTOs = new ArrayList<>();
@@ -181,5 +182,21 @@ public class GradeServiceImpl implements GradeService {
         }
         return gradestatusDTOs;
     }
+
+    @Override
+    public void addGrade(List<OutGradeDTO> outGradeDTOs){
+        for (OutGradeDTO outGradeDTO : outGradeDTOs) {
+            Grade grade = new Grade();
+            grade.setId(outGradeDTO.getId());
+            grade.setGradeType(outGradeDTO.getType());
+            grade.setGrade(outGradeDTO.getGrade());
+            grade.setProportion(outGradeDTO.getProportion());
+            grade.setName(outGradeDTO.getName());
+            Take take = takeRepository.findOneBySectionIdAndStudentId(outGradeDTO.getSecId(),outGradeDTO.getStudentId());
+            grade.setTakeId(take.getTakeId());
+            gradeRepository.save(grade);
+        }
+    }
+
 }
 

@@ -2,6 +2,7 @@ package com.infoa.educationms.controller;
 
 import com.infoa.educationms.DTO.GradeDTO;
 import com.infoa.educationms.DTO.GradeStatusDTO;
+import com.infoa.educationms.DTO.OutGradeDTO;
 import com.infoa.educationms.DTO.StudentGradeDTO;
 import com.infoa.educationms.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +21,6 @@ public class GradeController {
 
     @GetMapping("/grades/student/{studentId}")
     public ResponseEntity<List<GradeDTO>> getStudentGrades(@PathVariable Integer studentId) {
-        // 服务方法未传 studentId，建议扩展接口
         List<GradeDTO> result = gradeService.getAllGrades(studentId);
         return ResponseEntity.ok(result);
     }
@@ -37,4 +38,7 @@ public class GradeController {
         List<GradeStatusDTO> result = gradeService.getAllStudentGradesBySection(teacherId);
         return ResponseEntity.ok(result);
     }
+
+
+
 }

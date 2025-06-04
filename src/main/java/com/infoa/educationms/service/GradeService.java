@@ -3,6 +3,7 @@ package com.infoa.educationms.service;
 
 import com.infoa.educationms.DTO.GradeDTO;
 import com.infoa.educationms.DTO.GradeStatusDTO;
+import com.infoa.educationms.DTO.OutGradeDTO;
 import com.infoa.educationms.DTO.StudentGradeDTO;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,6 @@ public interface GradeService {
     List<StudentGradeDTO> getAllStudentGrades(Integer studentId);
 
     List<GradeStatusDTO> getAllStudentGradesBySection(Integer teacherId);
+
+    void addGrade(List<OutGradeDTO> outGrade);
 }

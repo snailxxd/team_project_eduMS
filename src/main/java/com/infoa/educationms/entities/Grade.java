@@ -22,6 +22,8 @@ public class Grade {
 
     private float proportion;
 
+    private int id;
+
     // constructors
     public Grade() {}
 
@@ -92,7 +94,15 @@ public class Grade {
     }
 
     public void setProportion(float proportion) {
-        this.proportion = proportion;
+            this.proportion = proportion;
+        }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

@@ -40,5 +40,5 @@ public interface TakeRepository extends JpaRepository<Take, Integer> {
      */
     List<Take> findByStudentId(Integer studentId);
 
-
+    Take findOneBySectionIdAndStudentId(int sectionId, int studentId);
 }

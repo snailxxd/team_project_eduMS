@@ -97,6 +97,8 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         dto.setTakesId(gradeChange.getTakeId());
         dto.setTeacherId(gradeChange.getTeacherId());
         dto.setResult(gradeChange.getResult());
+        dto.setName(grade.getName());
+        dto.setProportion(grade.getProportion());
         dto.setNewGrade(gradeChange.getNewGrade());
         dto.setGradeId(gradeChange.getGradeId());
         dto.setStudentId(student.getUserId());

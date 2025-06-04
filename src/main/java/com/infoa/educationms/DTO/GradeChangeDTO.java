@@ -7,6 +7,8 @@ public class GradeChangeDTO {
     private Integer takesId;
     private Integer teacherId;
     private Boolean result;
+    private String name;
+    private Float proportion;
     private Integer newGrade;
     private String applyTime;
     private String checkTime;

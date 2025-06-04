@@ -1,8 +1,6 @@
 package com.infoa.educationms.service;
 
-import com.infoa.educationms.DTO.OqCourseForStudentDTO;
-import com.infoa.educationms.DTO.OqCourseForTeacherDTO;
-import com.infoa.educationms.DTO.OqStudentDTO;
+import com.infoa.educationms.DTO.*;
 import com.infoa.educationms.entities.Course;
 
 import java.util.List;
@@ -43,4 +41,10 @@ public interface OnlineQuizService {
      * @param score 分数(0-100)
      */
     void setExamScore(Integer courseId, Integer studentId, Integer score);
+
+    List<Integer> getSectionIdsByCourse(Integer courseId);
+
+    List<OqTimeSlotDTO> getTimeSlotInfoBySection(Integer sectionId);
+
+    List<OqTeacherCourseInfoDTO> getTeacherCourseDetails(Integer teacherId);
 }

@@ -1,13 +1,12 @@
 package com.infoa.educationms.service;
 
-import com.infoa.educationms.DTO.OqCourseForStudentDTO;
-import com.infoa.educationms.DTO.OqCourseForTeacherDTO;
-import com.infoa.educationms.DTO.OqStudentDTO;
+import com.infoa.educationms.DTO.*;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +33,9 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
 
     @Autowired
     private PersonalInfoRepository personalInfoRepository;
+
+    @Autowired
+    private TimeSlotRepository timeSlotRepository;
 
     @Override
     public List<OqCourseForTeacherDTO> getCoursesByTeacher(Integer teacherId) {
@@ -204,5 +206,79 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
         examGrade.setProportion(examGrade.getProportion());
 
         gradeRepository.save(examGrade);
+    }
+
+    @Override
+    public List<Integer> getSectionIdsByCourse(Integer courseId) {
+        return sectionRepository.findByCourseId(courseId)
+                .stream()
+                .map(Section::getSectionId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OqTimeSlotDTO> getTimeSlotInfoBySection(Integer sectionId){
+        Section section = sectionRepository.findById(sectionId)
+                .orElseThrow(() -> new IllegalArgumentException("Section not found with id: " + sectionId));
+
+        // 2. Get the time slot IDs from the section
+        List<Integer> timeSlotIds = section.getTimeSlotIdList();
+
+        // 3. Get all time slots by their IDs
+        List<TimeSlot> timeSlots = timeSlotRepository.findAllById(timeSlotIds);
+
+        // 4. Convert to DTOs
+        return timeSlots.stream()
+                .map(ts -> new OqTimeSlotDTO(
+                        ts.getDay(),
+                        ts.getStartTime(),
+                        ts.getEndTime()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OqTeacherCourseInfoDTO> getTeacherCourseDetails(Integer teacherId){
+        List<Section> sections = sectionRepository.findByTeacherId(teacherId);
+
+        return sections.stream().map(section -> {
+            Course course = courseRepository.findById(section.getCourseId())
+                    .orElseThrow(() -> new IllegalArgumentException("课程不存在: " + section.getCourseId()));
+
+            List<Integer> timeSlotIds = section.getTimeSlotIdList();
+            List<TimeSlot> timeSlots = timeSlotRepository.findAllByIds(timeSlotIds);
+
+            if (timeSlots.isEmpty()) {
+                throw new IllegalArgumentException("找不到对应的时间段");
+            }
+
+            TimeSlot firstTimeSlot = timeSlots.get(0); // 假设只有一个时间段
+
+            return new OqTeacherCourseInfoDTO(
+                    section.getSectionId(),
+                    course.getTitle(),
+                    section.getSemester(),
+                    section.getYear(),
+                    convertDayToChinese(firstTimeSlot.getDay()),
+                    formatTime(firstTimeSlot.getStartTime()),
+                    formatTime(firstTimeSlot.getEndTime())
+            );
+        }).collect(Collectors.toList());
+    }
+
+    private String convertDayToChinese(int day) {
+        switch (day) {
+            case 1: return "周一";
+            case 2: return "周二";
+            case 3: return "周三";
+            case 4: return "周四";
+            case 5: return "周五";
+            case 6: return "周六";
+            case 7: return "周日";
+            default: return "未知";
+        }
+    }
+
+    private String formatTime(LocalTime time) {
+        return time != null ? time.toString() : "";
     }
 }

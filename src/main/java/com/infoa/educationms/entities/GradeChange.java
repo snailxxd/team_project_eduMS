@@ -43,7 +43,7 @@ public class GradeChange {
     // constructors
     public GradeChange() {}
 
-    public GradeChange(int changeId, int takeId, int teacherId, Boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId, String reason) {
+    public GradeChange(int changeId, int takeId, int teacherId, Boolean result, int newGrade, LocalDateTime applyTime, LocalDateTime checkTime, int gradeId, String reason, String type) {
         this.changeId = changeId;
         this.takeId = takeId;
         this.teacherId = teacherId;
@@ -53,6 +53,7 @@ public class GradeChange {
         this.checkTime = checkTime;
         this.gradeId = gradeId;
         this.reason = reason;
+        this.type = type;
     }
 
     // 转换为字符串
@@ -66,7 +67,8 @@ public class GradeChange {
                 ", applyTime=" + applyTime +
                 ", checkTime=" + checkTime +
                 ", gradeId=" + gradeId +
-                ", reason=" + reason +
+                ", reason='" + reason + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 
@@ -141,6 +143,14 @@ public class GradeChange {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

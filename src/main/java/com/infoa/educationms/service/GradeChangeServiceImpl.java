@@ -104,6 +104,7 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         dto.setCourseName(course.getTitle());
         dto.setOriginalGrade(grade.getGrade());
         dto.setReason(gradeChange.getReason());
+        dto.setType(gradeChange.getType());
         
         // 转换时间格式
         if (gradeChange.getApplyTime() != null) {

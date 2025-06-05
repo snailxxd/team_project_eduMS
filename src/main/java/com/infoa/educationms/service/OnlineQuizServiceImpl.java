@@ -245,7 +245,7 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
                     .orElseThrow(() -> new IllegalArgumentException("课程不存在: " + section.getCourseId()));
 
             List<Integer> timeSlotIds = section.getTimeSlotIdList();
-            List<TimeSlot> timeSlots = timeSlotRepository.findAllByIds(timeSlotIds);
+            List<TimeSlot> timeSlots = timeSlotRepository.findAllById(timeSlotIds);
 
             if (timeSlots.isEmpty()) {
                 throw new IllegalArgumentException("找不到对应的时间段");

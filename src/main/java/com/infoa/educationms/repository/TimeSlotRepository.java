@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Integer> {
-    List<TimeSlot> findAllByIds(List<Integer> timeSlotIds);
+    List<TimeSlot> findAllByTimeSlotIdIn(List<Integer> timeSlotIds);
 }

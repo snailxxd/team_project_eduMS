@@ -59,9 +59,6 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         // 设置申请时间为当前时间
         gradeChange.setApplyTime(LocalDateTime.now());
         
-        // 初始状态为待审核（result = false）
-        gradeChange.setResult(false);
-        
         GradeChange savedChange = gradeChangeRepository.save(gradeChange);
         return convertToDTO(savedChange);
     }

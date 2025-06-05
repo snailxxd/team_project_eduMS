@@ -34,8 +34,11 @@ public class UserServiceImpl implements UserService {
     private PersonalInfoRepository personalInfoRepository;
 
     @Override
-    public UserDTO getCurrentUser() {
-        return null;
+    public UserDTO getUserById(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User不存在"));
+        PersonalInfor pi = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
+        return toUserDTO(user, pi);
     }
 
     // ===== 搜索用户（基于关键字+角色过滤） =====

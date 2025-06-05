@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 
 @RestController
@@ -29,9 +29,9 @@ public class UserController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
     // 获取当前登录用户信息
-    @GetMapping("/user/current")
-    public ResponseEntity<UserDTO> getCurrentUser() {
-        UserDTO userDTO = userService.getCurrentUser();
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int userId) {
+        UserDTO userDTO = userService.getUserById(userId);
         return ResponseEntity.ok(userDTO);
     }
 

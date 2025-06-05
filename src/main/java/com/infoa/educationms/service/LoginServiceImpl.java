@@ -46,7 +46,6 @@ public class LoginServiceImpl implements LoginService {
                 userDTO.setType(user.getUserType().name());
                 userDTO.setPicture(userPersonalInfor.getPicture());
                 userDTO.setPhoneNumber(userPersonalInfor.getPhoneNumber());
-                loginResponseDTO.setUser(userDTO);
                 loginResponseDTO.setToken(jwtTokenProvider.generateToken(userDTO));
                 List<LoginResponseDTO> loginResponseDTOList = new ArrayList<>();
                 loginResponseDTOList.add(loginResponseDTO);

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserService {
 
+    UserDTO getUserById(int userId);
+
     // 通用用户接口
     List<UserDTO> searchUser(String keyword, UserRole role);
 
@@ -36,6 +38,5 @@ public interface UserService {
     // 管理员管理
     AdministratorDTO createAdmin(AdministratorDTO adminDTO);
 
-    // 获取当前用户
-    UserDTO getCurrentUser();
+
 }

@@ -153,4 +153,9 @@ public class GradeChange {
         this.type = type;
     }
 
+    public Object map(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'map'");
+    }
+
 }

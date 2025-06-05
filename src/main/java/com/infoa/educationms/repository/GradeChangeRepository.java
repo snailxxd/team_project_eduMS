@@ -1,5 +1,6 @@
 package com.infoa.educationms.repository;
 
+import com.infoa.educationms.entities.Grade;
 import com.infoa.educationms.entities.GradeChange;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,5 @@ public interface GradeChangeRepository extends JpaRepository<GradeChange, Intege
 
     List<GradeChange> findByResultIsNull();
 
+    GradeChange findOneByGradeChangeId(int gradeChangeId);
 }

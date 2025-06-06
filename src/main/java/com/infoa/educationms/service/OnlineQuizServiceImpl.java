@@ -139,6 +139,7 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
 
                     return new OqCourseForStudentDTO(
                             course.getCourseId(),
+                            sectionRepository.findFirstByCourseId(course.getCourseId()).get().getSectionId(),
                             course.getTitle(),
                             course.getCredits(),
                             teacherName

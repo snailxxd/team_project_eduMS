@@ -123,62 +123,50 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public List<CourseStatsDTO>     getCourseStats(Integer teacherId) {
-
-        // 假设通过 section 获取对应的 Course 信息
+    public List<CourseStatsDTO> getCourseStats(Integer teacherId) {
         List<Section> sections = sectionRepository.findByTeacherId(teacherId);
         List<CourseStatsDTO> dtos = new ArrayList<>();
         for (Section section : sections) {
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
-            List<Integer> scores = new ArrayList<>();
-            List<Double> point = new ArrayList<>();
-            for (Take take : takes) {
-                List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
-                double sum = 0;
-                for (Grade grade : grades) {
-                    sum += grade.getGrade()*grade.getProportion();
-                }
-                Integer i = (int)sum;
-                scores.add(i);
-                point.add(convertGradeToGpa(i));
-            }
 
-            double totalGpaSum = 0;
-            double totalProportion = 0;
+            List<Integer> validScores = new ArrayList<>();
+            List<Double> validGpas = new ArrayList<>();
+            Integer totalStudents = 0;
 
             for (Take take : takes) {
+                totalStudents += 1;
                 List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
 
-                double studentWeightedScore = 0;
-                double studentWeightedGpa = 0;
-                double studentTotalWeight = 0;
+                if (grades == null || grades.isEmpty()) continue;
+                double totalWeight = grades.stream().mapToDouble(Grade::getProportion).sum();
+                if (Math.abs(totalWeight - 1.0) > 0.01) continue;
 
+                // 计算总成绩
+                double totalScore = 0;
                 for (Grade grade : grades) {
-                    double weight = grade.getProportion();
-                    studentWeightedScore += grade.getGrade() * weight;
-                    studentWeightedGpa += convertGradeToGpa(grade.getGrade()) * weight;
-                    studentTotalWeight += weight;
+                    totalScore += grade.getGrade() * grade.getProportion();
                 }
 
-                if (studentTotalWeight > 0) {
-                    scores.add((int)Math.round(studentWeightedScore));
-                    totalGpaSum += studentWeightedGpa / studentTotalWeight;
-                    totalProportion++;
-                }
+                int score = (int) Math.round(totalScore);
+                double gpa = convertGradeToGpa(score);
+
+                validScores.add(score);
+                validGpas.add(gpa);
             }
 
-            double average = scores.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-            double gpa = totalProportion > 0 ? totalGpaSum / totalProportion : 0.0;
+            double averageScore = validScores.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+            double averageGpa = validGpas.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
 
             CourseStatsDTO dto = new CourseStatsDTO();
             dto.setCourseId(course.getCourseId());
             dto.setCourseName(course.getTitle());
-            dto.setGpa((float) gpa);
-            dto.setAverage((float) average);
             dto.setTeacherId(teacherId);
-            dto.setTotalStudents(takes.size());
-            dto.setScores(scores);
+            dto.setAverage((float) averageScore);
+            dto.setGpa((float) averageGpa);
+            dto.setScores(validScores);
+            dto.setTotalStudents(totalStudents);
+
             dtos.add(dto);
         }
         return dtos;

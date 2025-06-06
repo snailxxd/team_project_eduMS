@@ -65,19 +65,24 @@ public class GradeChangeServiceImpl implements GradeChangeService {
 
     @Override
     public GradeChangeDTO updateGradeChange(Integer gradeChangeId, GradeChangeDTO gradeChangeDTO) {
-        return gradeChangeRepository.findById(gradeChangeId)
-                .map(existingChange -> {
-                    // 只允许更新审核结果和审核时间
-                    if (gradeChangeDTO.getResult() != null) {
-                        existingChange.setResult(gradeChangeDTO.getResult());
-                        existingChange.setCheckTime(LocalDateTime.now());
-                    }
-                    
-                    // 其他字段不允许更新
-                    GradeChange updatedChange = gradeChangeRepository.save(existingChange);
-                    return convertToDTO(updatedChange);
-                })
-                .orElseThrow(() -> new IllegalArgumentException("成绩修改申请不存在: " + gradeChangeId));
+        GradeChange gradeChange = gradeChangeRepository.findOneByGradeChangeId(gradeChangeId);
+        if (gradeChange == null) {
+            throw new IllegalArgumentException("成绩修改申请不存在: " + gradeChangeId);
+        }
+        // 只允许更新审核结果和审核时间
+        if (gradeChangeDTO.getResult() != null) {
+            gradeChange.setResult(gradeChangeDTO.getResult());
+            gradeChange.setCheckTime(LocalDateTime.now());
+        }
+        // 更新成绩
+        Grade grade = gradeRepository.findOneByGradeId(gradeChange.getGradeId());
+        if (grade != null) {
+            grade.setGrade(gradeChange.getNewGrade());
+            gradeRepository.save(grade);
+        }
+        // 其他字段不允许更新
+        GradeChange updatedChange = gradeChangeRepository.save(gradeChange);
+        return convertToDTO(updatedChange);
     }
 
     // 实体转DTO（包含时间格式转换）
@@ -104,6 +109,7 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         dto.setCourseName(course.getTitle());
         dto.setOriginalGrade(grade.getGrade());
         dto.setReason(gradeChange.getReason());
+        dto.setType(gradeChange.getType());
         
         // 转换时间格式
         if (gradeChange.getApplyTime() != null) {

@@ -111,6 +111,9 @@ public class GradeServiceImpl implements GradeService {
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
 
+            if (grades.isEmpty()) {
+                continue;
+            }
             double sum = 0;
             for (Grade grade : grades) {
                 sum += grade.getProportion()*grade.getGrade();

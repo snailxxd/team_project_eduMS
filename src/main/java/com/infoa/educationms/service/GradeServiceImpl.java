@@ -45,22 +45,10 @@ public class GradeServiceImpl implements GradeService {
         User user = userRepository.findOneByUserId(studentId);
         // 检查user是否为null
         if (user == null) {
-            // 用户未找到，可以记录日志并返回空列表，或抛出异常
-            // 例如: log.warn("User not found with studentId: {}", studentId);
-            return gradeDTOs; // 返回空列表
+            return gradeDTOs;
         }
 
         PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
-        // 同样检查personalInfo是否为null，以避免后续的NullPointerException
-        if (personalInfo == null) {
-            // 个人信息未找到，可以记录日志
-            // 例如: log.warn("PersonalInfo not found for user: {}", studentId);
-            // 根据业务需求决定如何处理：
-            // 1. 返回空列表或部分填充的DTO（如果允许）
-            // 2. 抛出异常
-            // 此处选择继续，但学生姓名将无法设置，或者您可以选择返回
-            // return gradeDTOS;
-        }
 
         for (Take take : takes) {
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
@@ -68,8 +56,7 @@ public class GradeServiceImpl implements GradeService {
             Course course = courseRepository.findOneByCourseId(section.getCourseId()); // 建议也检查section和course是否为null
 
             if (section == null || course == null) {
-                // log.warn("Section or Course not found for takeId: {}", take.getTakeId());
-                continue; // 跳过这个take记录
+                continue;
             }
             if(!gradeRepository.existsByTakeId(take.getTakeId())){
                 continue;

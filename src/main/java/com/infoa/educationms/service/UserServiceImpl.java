@@ -46,11 +46,11 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> searchUser(String keyword, UserRole role) {
         List<User> users = (role == null) ? userRepository.findAll() : userRepository.findByUserType(role);
         return users.stream()
-                .filter(u -> keyword == null || keyword.isEmpty() ||
+                .filter(u -> u.getUserType() != UserRole.ROLE_ADMIN && (keyword == null || keyword.isEmpty() ||
                         u.getAccountNumber().contains(keyword) ||
                         personalInfoRepository.findById(u.getPersonalInfoId())
                                 .map(p -> p.getName().contains(keyword))
-                                .orElse(false)
+                                .orElse(false))
                 )
                 .map(this::toUserDTO)
                 .collect(Collectors.toList());
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
         Student student = new Student();
         student.setAccountNumber(studentDTO.getAccountNumber());
-        student.setPassword("默认密码");
+        student.setPassword("123456");
         student.setPersonalInfoId(pi.getPersonalInfoId());
         student.setUserType(UserRole.ROLE_STUDENT);
         student.setDeptName(studentDTO.getDeptName());

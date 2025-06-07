@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/courses")  // 建议把所有课程相关接口都放这里，方便管理
+@RequestMapping("/api/courses")
 public class CourseController {
 
     @Autowired

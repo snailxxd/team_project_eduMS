@@ -41,10 +41,9 @@ public class UserServiceImpl implements UserService {
         return toUserDTO(user, pi);
     }
 
-    // ===== 搜索用户（基于关键字+角色过滤） =====
+    // 搜索用户
     @Override
     public List<UserDTO> searchUser(String keyword, UserRole role) {
-        // 简化示例：全部拉出，内存过滤
         List<User> users = (role == null) ? userRepository.findAll() : userRepository.findByUserType(role);
         return users.stream()
                 .filter(u -> keyword == null || keyword.isEmpty() ||
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // ===== 新增用户 =====
+    // 新增用户
     @Override
     public UserDTO addUser(UserDTO userDTO) {
         // 先处理 PersonalInfo
@@ -126,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // ===== 学生管理 =====
+    // 学生管理
     @Override
     public List<StudentDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
@@ -187,7 +186,7 @@ public class UserServiceImpl implements UserService {
         return toStudentDTO(student, pi);
     }
 
-    // ===== 教师管理 =====
+    // 教师管理
     @Override
     public TeacherDTO getTeacherById(int userId) {
         Teacher teacher = teacherRepository.findById(userId)
@@ -235,7 +234,7 @@ public class UserServiceImpl implements UserService {
         return toTeacherDTO(teacher, pi);
     }
 
-    // ===== 管理员管理 =====
+    // 管理员管理
     @Override
     public AdministratorDTO createAdmin(AdministratorDTO adminDTO) {
         PersonalInfor pi = new PersonalInfor();
@@ -254,7 +253,7 @@ public class UserServiceImpl implements UserService {
         return toAdminDTO(admin, pi);
     }
 
-    // ===== 辅助方法：实体转DTO =====
+    // 辅助方法：实体转DTO
     private UserDTO toUserDTO(User user) {
         PersonalInfor pi = personalInfoRepository.findById(user.getPersonalInfoId()).orElse(null);
         return toUserDTO(user, pi);

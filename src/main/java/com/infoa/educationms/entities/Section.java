@@ -37,6 +37,8 @@ public class Section {
 
     private int time;
 
+    private int remain_capacity;
+
     // constructors
     public Section() {}
 

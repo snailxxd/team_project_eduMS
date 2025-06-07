@@ -201,9 +201,6 @@ public class GradeServiceImpl implements GradeService {
 
             for (Take take : takes) {
 
-
-
-
                 User user = userRepository.findOneByUserId(take.getStudentId());
                 PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
 
@@ -231,10 +228,11 @@ public class GradeServiceImpl implements GradeService {
                         }
 
                     }
+
                     gradestatusDTO.setName(grade.getName());
                     gradestatusDTO.setGrade(grade.getGrade());
                     gradestatusDTO.setStudentId(take.getStudentId());
-                    gradestatusDTO.setId(Integer.toString(section.getCourseId()));
+                    gradestatusDTO.setId(Integer.toString(grade.getGradeId()));
                     gradestatusDTO.setStudentName(personalInfo.getName());
                     gradestatusDTO.setCourseId(section.getCourseId());
                     gradestatusDTO.setCourseName(course.getTitle());

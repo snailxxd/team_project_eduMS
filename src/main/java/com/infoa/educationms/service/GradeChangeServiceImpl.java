@@ -132,7 +132,8 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         entity.setResult(dto.getResult());
         entity.setNewGrade(dto.getNewGrade());
         entity.setGradeId(dto.getGradeId());
-        
+        entity.setReason(dto.getReason());
+        entity.setType(dto.getType());
         // 转换时间格式
         if (dto.getApplyTime() != null) {
             entity.setApplyTime(LocalDateTime.parse(dto.getApplyTime(), formatter));

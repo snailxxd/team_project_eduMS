@@ -197,24 +197,20 @@ public class GradeServiceImpl implements GradeService {
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
 
-            boolean flag = true;
+
 
             for (Take take : takes) {
 
-                if(gradeRepository.existsByTakeId(take.getTakeId())){
-                    flag = false;
-                    continue;
-                }
 
-                GradeStatusDTO gradestatusDTO = new GradeStatusDTO();
+
+
                 User user = userRepository.findOneByUserId(take.getStudentId());
                 PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
 
                 List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
-                double sum = 0;
                 for (Grade grade : grades) {
+                    GradeStatusDTO gradestatusDTO = new GradeStatusDTO();
                     gradestatusDTO.setStatus("已确认");
-                    sum += grade.getProportion()*grade.getGrade();
 
                     if(!gradeChangeRepository.findByGradeId(grade.getGradeId()).isEmpty()){
                         gradestatusDTO.setStatus("待审核");
@@ -233,18 +229,18 @@ public class GradeServiceImpl implements GradeService {
                                 }
                             }
                         }
+
                     }
 
+                    gradestatusDTO.setGrade(grade.getGrade());
+                    gradestatusDTO.setStudentId(take.getStudentId());
+                    gradestatusDTO.setId(Integer.toString(section.getCourseId()));
+                    gradestatusDTO.setStudentName(personalInfo.getName());
+                    gradestatusDTO.setCourseId(section.getCourseId());
+                    gradestatusDTO.setCourseName(course.getTitle());
+                    gradestatusDTOs.add(gradestatusDTO);
 
                 }
-                Integer i = (int)sum;
-                gradestatusDTO.setGrade(i);
-                gradestatusDTO.setStudentId(take.getStudentId());
-                gradestatusDTO.setId(Integer.toString(section.getCourseId()));
-                gradestatusDTO.setStudentName(personalInfo.getName());
-                gradestatusDTO.setCourseId(section.getCourseId());
-                gradestatusDTO.setCourseName(course.getTitle());
-                gradestatusDTOs.add(gradestatusDTO);
             }
         }
         return gradestatusDTOs;

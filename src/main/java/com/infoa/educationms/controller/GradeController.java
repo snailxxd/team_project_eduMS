@@ -13,18 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api")
 public class GradeController {
 
     @Autowired
     private GradeService gradeService;
-
+    //成绩查询
     @GetMapping("/grades/student/{studentId}")
     public ResponseEntity<List<GradeDTO>> getStudentGrades(@PathVariable Integer studentId) {
         List<GradeDTO> result = gradeService.getAllGrades(studentId);
         return ResponseEntity.ok(result);
     }
-
+    //成绩分析
     @GetMapping("/grades/student/{studentId}/details")
     public ResponseEntity<List<StudentGradeDTO>> getStudentGradeDetails(@PathVariable Integer studentId) {
         List<StudentGradeDTO> result = gradeService.getAllStudentGrades(studentId);
@@ -33,8 +34,6 @@ public class GradeController {
 
     @GetMapping("/grades/teacher/{teacherId}")
     public ResponseEntity<List<GradeStatusDTO>> getTeacherGrades(@PathVariable Integer teacherId) {
-        // 复用成绩分析
-
         List<GradeStatusDTO> result = gradeService.getAllStudentGradesBySection(teacherId);
         return ResponseEntity.ok(result);
     }

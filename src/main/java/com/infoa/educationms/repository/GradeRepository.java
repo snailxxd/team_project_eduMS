@@ -46,4 +46,5 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
             @Param("gradeType") String gradeType);
 
 
+    boolean existsByTakeId(int takeId);
 }

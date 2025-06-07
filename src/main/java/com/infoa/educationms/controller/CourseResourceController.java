@@ -8,6 +8,7 @@ import com.infoa.educationms.service.CourseResourceService;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api")
 public class CourseResourceController {
 

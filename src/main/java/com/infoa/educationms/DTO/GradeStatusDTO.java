@@ -9,6 +9,7 @@ public class GradeStatusDTO {
     private String studentName;
     private Integer courseId;
     private String courseName;
+    private String name;
     private Integer grade;
     private String status;
 

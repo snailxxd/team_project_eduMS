@@ -231,7 +231,7 @@ public class GradeServiceImpl implements GradeService {
                         }
 
                     }
-
+                    gradestatusDTO.setName(grade.getName());
                     gradestatusDTO.setGrade(grade.getGrade());
                     gradestatusDTO.setStudentId(take.getStudentId());
                     gradestatusDTO.setId(Integer.toString(section.getCourseId()));

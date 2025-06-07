@@ -189,6 +189,44 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing token: " + e.getMessage());
         }
     }
+
+    @GetMapping("user/get_name")
+    public ResponseEntity<?> getUserNameFromToken(HttpServletRequest request) {
+        // 1. 从请求头中获取 Authorization 头部
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        // 2. 校验 Authorization 头部是否存在以及是否以 "Bearer " 开头
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization header is missing or invalid");
+        }
+
+        // 3. 提取 Token 字符串
+        String token = authHeader.substring(7); // "Bearer " 后面的部分就是 token
+
+        try {
+            String name = jwtTokenProvider.getClaimFromToken(token, claims -> claims.get("name", String.class));
+
+            if (name == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User ID not found in token");
+            }
+
+            return ResponseEntity.ok(name);
+
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has expired");
+        } catch (UnsupportedJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token format is unsupported");
+        } catch (MalformedJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is malformed");
+        } catch (SignatureException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token signature validation failed");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token claims: " + e.getMessage());
+        } catch (Exception e) {
+            // 其他未知错误
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing token: " + e.getMessage());
+        }
+    }
 }
 
 

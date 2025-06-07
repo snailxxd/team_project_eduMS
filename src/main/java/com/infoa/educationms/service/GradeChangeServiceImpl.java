@@ -123,17 +123,13 @@ public class GradeChangeServiceImpl implements GradeChangeService {
 
     // DTO转实体（包含时间格式转换）
     private GradeChange convertToEntity(GradeChangeDTO dto) {
+        Grade grade = gradeRepository.findOneByGradeId(dto.getGradeId());
         GradeChange entity = new GradeChange();
-        
-        // 复制基础字段
-        entity.setChangeId(dto.getGradeChangeId());
-        entity.setTakeId(dto.getTakesId());
-        entity.setTeacherId(dto.getTeacherId());
-        entity.setResult(dto.getResult());
-        entity.setNewGrade(dto.getNewGrade());
+        entity.setType(grade.getGradeType());
         entity.setGradeId(dto.getGradeId());
         entity.setReason(dto.getReason());
-        entity.setType(dto.getType());
+        entity.setTakeId(dto.getTakesId());
+        entity.setTeacherId(dto.getTeacherId());
         // 转换时间格式
         if (dto.getApplyTime() != null) {
             entity.setApplyTime(LocalDateTime.parse(dto.getApplyTime(), formatter));
@@ -141,7 +137,6 @@ public class GradeChangeServiceImpl implements GradeChangeService {
         if (dto.getCheckTime() != null) {
             entity.setCheckTime(LocalDateTime.parse(dto.getCheckTime(), formatter));
         }
-        
         return entity;
     }
 }

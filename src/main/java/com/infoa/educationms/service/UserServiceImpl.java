@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
         Student student = new Student();
         student.setAccountNumber(studentDTO.getAccountNumber());
-        student.setPassword("默认密码");
+        student.setPassword("123456");
         student.setPersonalInfoId(pi.getPersonalInfoId());
         student.setUserType(UserRole.ROLE_STUDENT);
         student.setDeptName(studentDTO.getDeptName());

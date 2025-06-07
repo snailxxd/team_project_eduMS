@@ -35,8 +35,6 @@ public class Section {
     @Column(name = "teacher_id")
     private int teacherId;
 
-    private int time;
-
     private int remain_capacity;
 
     // constructors
@@ -50,7 +48,6 @@ public class Section {
         this.classroomId = classroomId;
         this.timeSlotId = timeSlotId;
         this.teacherId = teacherId;
-        this.time = time;
     }
 
     // 转换为字符串
@@ -63,7 +60,6 @@ public class Section {
                 ", classroomId=" + classroomId +
                 ", timeSlotId=" + timeSlotId +
                 ", teacherId=" + teacherId +
-                ", time=" + time +
                 '}';
     }
 
@@ -131,13 +127,5 @@ public class Section {
 
     public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
     }
 }

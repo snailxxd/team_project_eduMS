@@ -4,7 +4,6 @@ import com.infoa.educationms.DTO.GradeChangeDTO;
 import com.infoa.educationms.entities.*;
 import com.infoa.educationms.repository.*;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +64,7 @@ public class GradeChangeServiceImpl implements GradeChangeService {
 
     @Override
     public GradeChangeDTO updateGradeChange(Integer gradeChangeId, GradeChangeDTO gradeChangeDTO) {
-        GradeChange gradeChange = gradeChangeRepository.findOneByGradeChangeId(gradeChangeId);
+        GradeChange gradeChange = gradeChangeRepository.findOneByChangeId(gradeChangeId);
         if (gradeChange == null) {
             throw new IllegalArgumentException("成绩修改申请不存在: " + gradeChangeId);
         }

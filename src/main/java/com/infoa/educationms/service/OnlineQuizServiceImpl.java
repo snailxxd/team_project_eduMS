@@ -103,10 +103,17 @@ public class OnlineQuizServiceImpl implements OnlineQuizService {
 
     @Override
     public List<OqCourseForStudentDTO> getCoursesByStudent(Integer studentId) {
+        List<Take> takes;
         // 1. 查询学生的所有选课记录
-        List<Take> takes = takeRepository.findByStudentId(studentId);
-        if (takes.isEmpty()) {
-            return Collections.emptyList();
+        if(studentId == -1)
+        {
+            takes = takeRepository.findAll();
+        }
+        else {
+            takes = takeRepository.findByStudentId(studentId);
+            if (takes.isEmpty()) {
+                return Collections.emptyList();
+            }
         }
 
         // 2. 获取sectionId列表

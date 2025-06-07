@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
         dto.setUserId(user.getUserId());
         dto.setAccountNumber(user.getAccountNumber());
         dto.setPersonalInforId(user.getPersonalInfoId());
-        dto.setType(user.getUserType().name().toLowerCase());
+        dto.setType(user.getUserType().name());
         if (pi != null) {
             dto.setName(pi.getName());
             dto.setPhoneNumber(pi.getPhoneNumber());

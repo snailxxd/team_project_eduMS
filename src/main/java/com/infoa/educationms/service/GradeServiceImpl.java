@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -39,15 +40,14 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public List<GradeDTO> getAllGrades(Integer studentId){
+        List<GradeDTO> gradeDTOs = new ArrayList<>();
         List<Take> takes= takeRepository.findByStudentId(studentId);
-        List<GradeDTO> gradeDTOS = new ArrayList<>();
-
         User user = userRepository.findOneByUserId(studentId);
         // 检查user是否为null
         if (user == null) {
             // 用户未找到，可以记录日志并返回空列表，或抛出异常
             // 例如: log.warn("User not found with studentId: {}", studentId);
-            return gradeDTOS; // 返回空列表
+            return gradeDTOs; // 返回空列表
         }
 
         PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
@@ -71,42 +71,101 @@ public class GradeServiceImpl implements GradeService {
                 // log.warn("Section or Course not found for takeId: {}", take.getTakeId());
                 continue; // 跳过这个take记录
             }
-
-            for (Grade grade : grades) {
-                GradeDTO gradeDTO = new GradeDTO();
-                gradeDTO.setGradeId(grade.getGradeId());
-                gradeDTO.setGrade(grade.getGrade());
-                gradeDTO.setTakesId(take.getTakeId());
-                gradeDTO.setProportion(grade.getProportion());
-                gradeDTO.setType(grade.getGradeType());
-                gradeDTO.setStudentId(studentId);
-                // 只有在personalInfo不为null时才设置学生姓名
-                if (personalInfo != null) {
-                    gradeDTO.setStudentName(personalInfo.getName());
-                } else {
-                    gradeDTO.setStudentName("未知学生"); // 或者其他默认值
-                }
-                gradeDTO.setCourseName(course.getTitle());
-                gradeDTO.setCourseId(course.getCourseId());
-                gradeDTOS.add(gradeDTO);
+            if(!gradeRepository.existsByTakeId(take.getTakeId())){
+                continue;
             }
+            List<Double> gradelist = Arrays.asList(0.0, 0.0, 0.0);
+            List<Double> proportionlist = Arrays.asList(0.0, 0.0, 0.0);
+            for (Grade grade : grades) {
+                switch (grade.getGradeType()) {
+                    case "attending" -> {
+                        gradelist.set(0, (gradelist.get(0) * proportionlist.get(0) + grade.getProportion() * grade.getGrade()) / (proportionlist.get(0) + grade.getProportion()));
+                        proportionlist.set(0, proportionlist.get(0) + grade.getProportion());
+                    }
+                    case "homework" -> {
+                        gradelist.set(1, (gradelist.get(1) * proportionlist.get(1) + grade.getProportion() * grade.getGrade()) / (proportionlist.get(1) + grade.getProportion()));
+                        proportionlist.set(1, proportionlist.get(1) + grade.getProportion());
+                    }
+                    case "test" -> {
+                        gradelist.set(2, (gradelist.get(2) * proportionlist.get(2) + grade.getProportion() * grade.getGrade()) / (proportionlist.get(2) + grade.getProportion()));
+                        proportionlist.set(2, proportionlist.get(2) + grade.getProportion());
+                    }
+                }
+            }
+
+            GradeDTO gradeDTO1 = new GradeDTO();
+            GradeDTO gradeDTO2 = new GradeDTO();
+            GradeDTO gradeDTO3 = new GradeDTO();
+            gradeDTO1.setCourseId(course.getCourseId());
+            gradeDTO2.setCourseId(course.getCourseId());
+            gradeDTO3.setCourseId(course.getCourseId());
+            gradeDTO1.setTakesId(take.getTakeId());
+            gradeDTO2.setTakesId(take.getTakeId());
+            gradeDTO3.setTakesId(take.getTakeId());
+            gradeDTO1.setStudentId(studentId);
+            gradeDTO2.setStudentId(studentId);
+            gradeDTO3.setStudentId(studentId);
+            String name = "";
+            if (personalInfo != null) {
+                name = personalInfo.getName();
+            }
+            gradeDTO1.setStudentName(name);
+            gradeDTO2.setStudentName(name);
+            gradeDTO3.setStudentName(name);
+
+            gradeDTO1.setCourseName(course.getTitle());
+            gradeDTO1.setCourseId(course.getCourseId());
+            gradeDTO2.setCourseName(course.getTitle());
+            gradeDTO2.setCourseId(course.getCourseId());
+            gradeDTO3.setCourseName(course.getTitle());
+            gradeDTO3.setCourseId(course.getCourseId());
+
+            gradeDTO1.setGradeId(1);
+
+            gradeDTO1.setProportion(proportionlist.get(0).floatValue());
+            gradeDTO1.setGrade(gradelist.get(0).intValue());
+            gradeDTO2.setProportion(proportionlist.get(1).floatValue());
+            gradeDTO2.setGrade(gradelist.get(1).intValue());
+            gradeDTO3.setProportion(proportionlist.get(2).floatValue());
+            gradeDTO3.setGrade(gradelist.get(2).intValue());
+
+            gradeDTO1.setType("attending");
+            gradeDTO2.setType("homework");
+            gradeDTO3.setType("test");
+
+            gradeDTOs.add(gradeDTO1);
+            gradeDTOs.add(gradeDTO2);
+            gradeDTOs.add(gradeDTO3);
         }
-        return gradeDTOS;
+        return gradeDTOs;
     }
 
 
     private double convertGradeToGpa(int grade) {
-        if (grade >= 90) return 4.0;
-        if (grade >= 80) return 3.0;
-        if (grade >= 70) return 2.0;
-        if (grade >= 60) return 1.0;
+        if (grade >= 95) return 5.0;
+        if (grade >= 92) return 4.8;
+        if (grade >= 89) return 4.5;
+        if (grade >= 86) return 4.2;
+        if (grade >= 83) return 3.9;
+        if (grade >= 80) return 3.6;
+        if (grade >= 77) return 3.3;
+        if (grade >= 74) return 3.0;
+        if (grade >= 71) return 2.7;
+        if (grade >= 68) return 2.4;
+        if (grade >= 65) return 2.1;
+        if (grade >= 62) return 1.8;
+        if (grade >= 60) return 1.5;
         return 0.0;
     }
+
     @Override
     public List<StudentGradeDTO> getAllStudentGrades(Integer studentId){
         List<Take> takes = takeRepository.findByStudentId(studentId);
         List<StudentGradeDTO> studentGradeDTOS = new ArrayList<>();
         for (Take take : takes) {
+            if(!gradeRepository.existsByTakeId(take.getTakeId())){
+                continue;
+            }
             Section section = sectionRepository.findOneBySectionId(take.getSectionId());
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Grade> grades = gradeRepository.findByTakeId(take.getTakeId());
@@ -137,7 +196,16 @@ public class GradeServiceImpl implements GradeService {
         for (Section section : sections) {
             Course course = courseRepository.findOneByCourseId(section.getCourseId());
             List<Take> takes = takeRepository.findBySectionId(section.getSectionId());
+
+            boolean flag = true;
+
             for (Take take : takes) {
+
+                if(gradeRepository.existsByTakeId(take.getTakeId())){
+                    flag = false;
+                    continue;
+                }
+
                 GradeStatusDTO gradestatusDTO = new GradeStatusDTO();
                 User user = userRepository.findOneByUserId(take.getStudentId());
                 PersonalInfor personalInfo = personalInfoRepository.findOneByPersonalInforId(user.getPersonalInfoId());
@@ -155,12 +223,8 @@ public class GradeServiceImpl implements GradeService {
                         for (Boolean result : results) {
                             if(result == null){Isnull = true;}
                         }
-                        if(Isnull){
-                        }
-                        else {
+                        if(!Isnull){
                             if(!results.isEmpty()){
-
-
                                 if(results.get(0) == true){
                                     gradestatusDTO.setStatus("已修改");
                                 }
